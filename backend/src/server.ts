@@ -5,6 +5,7 @@ import {
   applicationSchema,
   updateApplicationSchema,
 } from "./../schemas/applicationSchema.js";
+import { errorHandler } from "./middleware/errorHandler.js";
 const app = express();
 
 app.use(cors());
@@ -13,12 +14,42 @@ app.use(express.json());
 //GET
 app.get("/api/applications", async (req, res) => {
   try {
-    const applications = await pool.query("SELECT * FROM applications");
+    const applications = await pool.query(
+      "SELECT * FROM applications ORDER BY created_at DESC",
+    );
     res.json(applications.rows);
-    console.log(applications.rows);
+    // console.log(applications.rows);
   } catch (err: any) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).json({
+      error: "Failed to fetch applications",
+    });
+  }
+});
+
+//GET by ID
+app.get("/api/applications/:id", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    if (Number.isNaN(id)) {
+      return res.status(400).json({
+        error: "Invalid application ID",
+      });
+    }
+    const application = await pool.query(
+      "SELECT * FROM applications WHERE id = $1",
+      [id],
+    );
+    if (application.rows.length === 0) {
+      return res.status(404).json({
+        error: "Application not found",
+      });
+    }
+    res.json(application.rows[0]);
+  } catch (err: any) {
+    res.status(500).json({
+      error: "Failed to fetch application",
+    });
   }
 });
 
@@ -28,7 +59,8 @@ app.post("/api/applications", async (req, res) => {
     const validatedData = applicationSchema.safeParse(req.body);
     if (!validatedData.success) {
       return res.status(400).json({
-        errors: validatedData.error.issues,
+        error: "Validation failed",
+        details: validatedData.error.issues,
       });
     }
     const { company, position, location, status, date_applied, salary, notes } =
@@ -44,7 +76,9 @@ app.post("/api/applications", async (req, res) => {
     res.status(201).json(result.rows[0]);
   } catch (err: any) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).json({
+      error: "Failed to create application",
+    });
   }
 });
 
@@ -54,10 +88,17 @@ app.patch("/api/applications/:id", async (req, res) => {
     const validatedData = updateApplicationSchema.safeParse(req.body);
     if (!validatedData.success) {
       return res.status(400).json({
-        errors: validatedData.error.issues,
+        error: "Validation failed",
+        details: validatedData.error.issues,
       });
     }
-    const { id } = req.params;
+    const id = Number(req.params.id);
+
+    if (Number.isNaN(id)) {
+      return res.status(400).json({
+        error: "Invalid application ID",
+      });
+    }
     const { company, position, location, status, date_applied, salary, notes } =
       validatedData.data;
     const updateApplication = await pool.query(
@@ -76,20 +117,24 @@ app.patch("/api/applications/:id", async (req, res) => {
     );
 
     if (updateApplication.rows.length === 0) {
-      return res.status(404).send("Application not found");
+      return res.status(404).json({
+        error: "Application not found",
+      });
     }
 
     res.json(updateApplication.rows[0]);
   } catch (err: any) {
     console.error(err.message);
-    res.status(500).send("Failed to update application");
+    res.status(500).json({
+      error: "Failed to update application",
+    });
   }
 });
 
 //DELETE
 app.delete("/api/applications/:id", async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = Number(req.params.id);
     if (Number.isNaN(id)) {
       return res.status(400).json({
         error: "Invalid application ID",
@@ -99,12 +144,22 @@ app.delete("/api/applications/:id", async (req, res) => {
       "DELETE FROM applications WHERE id = $1 RETURNING *",
       [id],
     );
+
+    if (deleteApplication.rows.length === 0) {
+      return res.status(404).json({
+        error: "Application not found",
+      });
+    }
     res.json(deleteApplication.rows[0]);
   } catch (err: any) {
     console.error(err.message);
-    res.status(500).send("Failed to delete application");
+    res.status(500).json({
+      error: "Failed to delete application",
+    });
   }
 });
+
+app.use(errorHandler);
 
 const PORT = 5000;
 
