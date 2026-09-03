@@ -1,14 +1,23 @@
 import express from "express";
 import cors from "cors";
-
+import pool from "./db";
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("App is running");
+
+app.get("/api/applications", async (req, res) => {
+  try {
+    const applications = await pool.query("SELECT * FROM applications");
+    res.json(applications.rows);
+    console.log(applications.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
 });
+
 
 const PORT = 5000;
 
