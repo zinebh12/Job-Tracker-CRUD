@@ -23,13 +23,45 @@ app.post("/api/applications", async (req, res) => {
   try {
     const { company, position, location, status } = req.body;
     const newApplication = await pool.query(
-      "INSERT INTO applications (company, position,location, status) VALUES ($1, $2, $3, $4) RETURNING *",
+      "INSERT INTO applications (company, position, location, status) VALUES ($1, $2, $3, $4) RETURNING *",
       [company, position, location, status],
     );
     res.json(newApplication.rows[0]);
   } catch (err: any) {
     console.error(err.message);
     res.status(500).send("Server Error");
+  }
+});
+
+//PATCH
+app.patch("/api/applications/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { company, position, location, status, date_applied, salary, notes } =
+      req.body;
+    const updateApplication = await pool.query(
+      `UPDATE applications
+       SET
+         company = COALESCE($1, company),
+         position = COALESCE($2, position),
+         location = COALESCE($3, location),
+         status = COALESCE($4, status),
+         date_applied = COALESCE($5, date_applied),
+         salary = COALESCE($6, salary),
+         notes = COALESCE($7, notes)
+       WHERE id = $8
+       RETURNING *`,
+      [company, position, location, status, date_applied, salary, notes, id],
+    );
+
+    if (updateApplication.rows.length === 0) {
+      return res.status(404).send("Application not found");
+    }
+
+    res.json(updateApplication.rows[0]);
+  } catch (err: any) {
+    console.error(err.message);
+    res.status(500).send("Failed to update application");
   }
 });
 
