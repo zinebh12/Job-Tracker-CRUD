@@ -65,6 +65,21 @@ app.patch("/api/applications/:id", async (req, res) => {
   }
 });
 
+//DELETE
+app.delete("/api/applications/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteApplication = await pool.query(
+      "DELETE FROM applications WHERE id = $1 RETURNING *",
+      [id],
+    );
+    res.json(deleteApplication.rows[0]);
+  } catch (err: any) {
+    console.error(err.message);
+    res.status(500).send("Failed to delete application");
+  }
+});
+
 const PORT = 5000;
 
 app.listen(PORT, () => {
