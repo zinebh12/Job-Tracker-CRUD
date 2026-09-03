@@ -1,6 +1,10 @@
 import express from "express";
 import cors from "cors";
 import { pool } from "./db.js";
+import {
+  applicationSchema,
+  updateApplicationSchema,
+} from "./../schemas/applicationSchema.js";
 const app = express();
 
 app.use(cors());
@@ -21,12 +25,23 @@ app.get("/api/applications", async (req, res) => {
 //POST
 app.post("/api/applications", async (req, res) => {
   try {
-    const { company, position, location, status } = req.body;
-    const newApplication = await pool.query(
-      "INSERT INTO applications (company, position, location, status) VALUES ($1, $2, $3, $4) RETURNING *",
-      [company, position, location, status],
+    const validatedData = applicationSchema.safeParse(req.body);
+    if (!validatedData.success) {
+      return res.status(400).json({
+        errors: validatedData.error.issues,
+      });
+    }
+    const { company, position, location, status, date_applied, salary, notes } =
+      validatedData.data;
+
+    const result = await pool.query(
+      `INSERT INTO applications
+       (company, position, location, status, date_applied, salary, notes)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       RETURNING *`,
+      [company, position, location, status, date_applied, salary, notes],
     );
-    res.json(newApplication.rows[0]);
+    res.status(201).json(result.rows[0]);
   } catch (err: any) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -36,9 +51,15 @@ app.post("/api/applications", async (req, res) => {
 //PATCH
 app.patch("/api/applications/:id", async (req, res) => {
   try {
+    const validatedData = updateApplicationSchema.safeParse(req.body);
+    if (!validatedData.success) {
+      return res.status(400).json({
+        errors: validatedData.error.issues,
+      });
+    }
     const { id } = req.params;
     const { company, position, location, status, date_applied, salary, notes } =
-      req.body;
+      validatedData.data;
     const updateApplication = await pool.query(
       `UPDATE applications
        SET
@@ -69,6 +90,11 @@ app.patch("/api/applications/:id", async (req, res) => {
 app.delete("/api/applications/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    if (Number.isNaN(id)) {
+      return res.status(400).json({
+        error: "Invalid application ID",
+      });
+    }
     const deleteApplication = await pool.query(
       "DELETE FROM applications WHERE id = $1 RETURNING *",
       [id],
