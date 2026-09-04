@@ -16,4 +16,6 @@ export const applicationQuerySchema = z.object({
   status: z.enum(["Applied", "Interview", "Offer", "Rejected"]).optional(),
   location: z.string().optional(),
   search: z.string().optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(10),
 });

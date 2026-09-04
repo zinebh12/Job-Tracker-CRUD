@@ -22,11 +22,11 @@ app.get("/api/applications", async (req, res) => {
         details: validatedQuery.error.issues,
       });
     }
-    const { status, location, search } = validatedQuery.data;
+    const { status, location, search, page, limit } = validatedQuery.data;
 
     let query = "SELECT * FROM applications";
     const conditions: string[] = [];
-    const values: string[] = [];
+    const values: (string | number)[] = [];
 
     if (status) {
       conditions.push(`status ILIKE $${values.length + 1}`);
@@ -49,11 +49,29 @@ app.get("/api/applications", async (req, res) => {
     if (conditions.length > 0) {
       query += ` WHERE ${conditions.join(" AND ")}`;
     }
+    const countQuery = query.replace("SELECT *", "SELECT COUNT(*) AS total");
+    const countResult = await pool.query(countQuery, values);
+    const total = Number(countResult.rows[0].total);
 
     query += " ORDER BY created_at DESC";
-    const applications = await pool.query(query, values);
 
-    res.json(applications.rows);
+    //pagination
+    const offset = (page - 1) * limit;
+    query += ` LIMIT $${values.length + 1} OFFSET $${values.length + 2}`;
+    const paginationValues = [...values, limit, offset];
+
+    const applications = await pool.query(query, paginationValues);
+    const totalPages = Math.ceil(total / limit);
+
+    res.json({
+      applications: applications.rows,
+      pagination: {
+        page,
+        total,
+        limit,
+        totalPages,
+      },
+    });
     // console.log(applications.rows);
   } catch (err: any) {
     console.error(err.message);
