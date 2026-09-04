@@ -4,6 +4,7 @@ import { pool } from "./db.js";
 import {
   applicationSchema,
   updateApplicationSchema,
+  applicationQuerySchema,
 } from "./../schemas/applicationSchema.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 const app = express();
@@ -14,9 +15,44 @@ app.use(express.json());
 //GET
 app.get("/api/applications", async (req, res) => {
   try {
-    const applications = await pool.query(
-      "SELECT * FROM applications ORDER BY created_at DESC",
-    );
+    const validatedQuery = applicationQuerySchema.safeParse(req.query);
+    if (!validatedQuery.success) {
+      return res.status(400).json({
+        error: "Validation failed",
+        details: validatedQuery.error.issues,
+      });
+    }
+    const { status, location, search } = validatedQuery.data;
+
+    let query = "SELECT * FROM applications";
+    const conditions: string[] = [];
+    const values: string[] = [];
+
+    if (status) {
+      conditions.push(`status ILIKE $${values.length + 1}`);
+      values.push(status);
+    }
+    if (location) {
+      conditions.push(`location ILIKE $${values.length + 1}`);
+      values.push(`%${location}%`);
+    }
+
+    if (search) {
+      conditions.push(
+        `(company ILIKE $${values.length + 1}
+        OR position ILIKE $${values.length + 1}
+        OR location ILIKE $${values.length + 1})`,
+      );
+      values.push(`%${search}%`);
+    }
+
+    if (conditions.length > 0) {
+      query += ` WHERE ${conditions.join(" AND ")}`;
+    }
+
+    query += " ORDER BY created_at DESC";
+    const applications = await pool.query(query, values);
+
     res.json(applications.rows);
     // console.log(applications.rows);
   } catch (err: any) {
@@ -69,7 +105,7 @@ app.post("/api/applications", async (req, res) => {
     const result = await pool.query(
       `INSERT INTO applications
        (company, position, location, status, date_applied, salary, notes)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       valuesS ($1, $2, $3, $4, $5, $6, $7)
        RETURNING *`,
       [company, position, location, status, date_applied, salary, notes],
     );

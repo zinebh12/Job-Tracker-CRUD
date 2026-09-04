@@ -11,3 +11,9 @@ export const applicationSchema = z.object({
 });
 
 export const updateApplicationSchema = applicationSchema.partial();
+
+export const applicationQuerySchema = z.object({
+  status: z.enum(["Applied", "Interview", "Offer", "Rejected"]).optional(),
+  location: z.string().optional(),
+  search: z.string().optional(),
+});
