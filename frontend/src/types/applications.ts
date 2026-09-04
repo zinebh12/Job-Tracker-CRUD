@@ -27,3 +27,11 @@ export interface PaginationProps {
   totalPages: number;
   onPageChange: (page: number) => void;
 }
+
+export interface SearchProps {
+  onSearch: (term: string) => void;
+}
+
+export interface StatusFilterProps {
+  onStatusChange: (status: string) => void;
+}
