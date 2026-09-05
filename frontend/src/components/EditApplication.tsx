@@ -29,16 +29,16 @@ const EditApplication = ({ application, onEdit }: EditApplicationProps) => {
 
   const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onEdit(
-      formData.id,
-      formData.company,
-      formData.position,
-      formData.location,
-      formData.status,
-      formData.date_applied ? new Date(formData.date_applied) : null,
-      formData.salary ? Number(formData.salary) : null,
-      formData.notes,
-    );
+    onEdit({
+      id: formData.id,
+      company: formData.company,
+      position: formData.position,
+      location: formData.location,
+      status: formData.status,
+      date_applied: formData.date_applied || null,
+      salary: formData.salary ? Number(formData.salary) : null,
+      notes: formData.notes,
+    });
   };
 
   return (

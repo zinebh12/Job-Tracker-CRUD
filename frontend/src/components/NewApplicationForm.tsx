@@ -1,10 +1,9 @@
 import type {
-  NewApplicationFormProps,
+  NewApplicationFormSubmit,
   ApplicationStatus,
 } from "./../types/applications";
 import { useState } from "react";
-const NewApplicationForm = ({ onSubmit }: NewApplicationFormProps) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const NewApplicationForm = ({ onSubmit }: NewApplicationFormSubmit) => {
   const [formData, setFormData] = useState<{
     company: string;
     position: string;
@@ -25,18 +24,24 @@ const NewApplicationForm = ({ onSubmit }: NewApplicationFormProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("FORM SUBMITTED!");
-    console.log("formdata", formData);
-    onSubmit(
-      formData.company,
-      formData.position,
-      formData.location,
-      formData.status,
-      formData.date_applied ? new Date(formData.date_applied) : null,
-      formData.salary ? Number(formData.salary) : null,
-      formData.notes,
-    );
-    console.log("formdata", formData);
+    onSubmit({
+      company: formData.company,
+      position: formData.position,
+      location: formData.location,
+      status: formData.status,
+      date_applied: formData.date_applied || null,
+      salary: formData.salary ? Number(formData.salary) : null,
+      notes: formData.notes,
+    });
+    setFormData({
+      company: "",
+      position: "",
+      location: "",
+      status: "Applied",
+      date_applied: "",
+      salary: "",
+      notes: "",
+    });
   };
 
   return (
@@ -122,9 +127,7 @@ const NewApplicationForm = ({ onSubmit }: NewApplicationFormProps) => {
         }}
         placeholder="Notes"
       ></textarea>
-      <button disabled={isSubmitting}>
-        {isSubmitting ? "Saving..." : "Save Changes"}
-      </button>
+      <button type="submit">create</button>
     </form>
   );
 };

@@ -39,17 +39,18 @@ export interface StatusFilterProps {
 export type ApplicationStatus = "Applied" | "Interview" | "Offer" | "Rejected";
 
 export interface NewApplicationFormProps {
-  onSubmit: (
-    company: string,
-    position: string,
-    location: string,
-    status: ApplicationStatus,
-    date_applied: Date | null,
-    salary: number | null,
-    notes: string,
-  ) => void;
+  company: string;
+  position: string;
+  location: string;
+  status: ApplicationStatus;
+  date_applied: string | null;
+  salary: number | null;
+  notes: string;
 }
 
+export interface NewApplicationFormSubmit {
+  onSubmit: (application: NewApplicationFormProps) => Promise<void>;
+}
 export interface UpdateApplication {
   id: number;
   company: string;
@@ -63,14 +64,5 @@ export interface UpdateApplication {
 
 export interface EditApplicationProps {
   application: Application;
-  onEdit: (
-    id: number,
-    company: string,
-    position: string,
-    location: string,
-    status: ApplicationStatus,
-    date_applied: Date | null,
-    salary: number | null,
-    notes: string,
-  ) => void;
+  onEdit: (application: UpdateApplication) => Promise<void>;
 }

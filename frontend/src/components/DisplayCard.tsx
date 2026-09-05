@@ -1,7 +1,10 @@
 import { useState } from "react";
-import type { Application, ApplicationStatus } from "./../types/applications";
+import type { Application } from "./../types/applications";
+import {
+  handleEditApplication,
+  handleDeleteApplication,
+} from "./../handlers/applicationsHandlers";
 import EditApplication from "./EditApplication";
-import { editApplication, deleteApplication } from "../services/applicationApi";
 import { useNavigate } from "react-router-dom";
 const DisplayCard = ({
   application,
@@ -16,44 +19,6 @@ const DisplayCard = ({
 }) => {
   const navigate = useNavigate();
   const [openEditApplication, setOpenEditApplication] = useState(false);
-  const handleEditApplication = async (
-    id: number,
-    company: string,
-    position: string,
-    location: string,
-    status: ApplicationStatus,
-    date_applied: Date | null,
-    salary: number | null,
-    notes: string,
-  ) => {
-    try {
-      await editApplication({
-        id,
-        company,
-        position,
-        location,
-        status,
-        date_applied: date_applied
-          ? date_applied.toISOString().split("T")[0]
-          : null,
-        salary,
-        notes,
-      });
-      onSuccess();
-      setOpenEditApplication(false);
-    } catch (error) {
-      console.error("Error creating application:", error);
-    }
-  };
-
-  const handleDeleteApplication = async () => {
-    try {
-      await deleteApplication(application.id);
-      onSuccess();
-    } catch (error) {
-      console.log("Error deleting applicatin", error);
-    }
-  };
 
   return (
     <div className="border p-4 rounded shadow-md mb-4">
@@ -75,21 +40,22 @@ const DisplayCard = ({
       <p>Date Applied: {application.date_applied}</p>
       <p>Salary: {application.salary}</p>
       <p>Notes: {application.notes}</p>
-      <button
-        onClick={() => {
-          setOpenEditApplication(!openEditApplication);
-          console.log(application.id);
-        }}
-      >
+      <button onClick={() => setOpenEditApplication(!openEditApplication)}>
         Edit Application
       </button>
       {openEditApplication && (
         <EditApplication
-          onEdit={handleEditApplication}
+          onEdit={(application) =>
+            handleEditApplication(application, onSuccess)
+          }
           application={application}
         />
       )}
-      <button onClick={handleDeleteApplication}>Delete</button>
+      <button
+        onClick={() => handleDeleteApplication(application.id, onSuccess)}
+      >
+        Delete
+      </button>
       <button onClick={() => navigate(`/application/${application.id}`)}>
         View details
       </button>
