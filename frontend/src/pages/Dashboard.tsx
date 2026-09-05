@@ -16,7 +16,11 @@ const Dashboard = () => {
   const [statusFilter, setStatusFilter] = useState("");
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   // Fetch applications from the backend API
-  const { data, refetch } = useApplications(page, searchTerm, statusFilter);
+  const { data, refetch, loading, error } = useApplications(
+    page,
+    searchTerm,
+    statusFilter,
+  );
 
   // handle search
   const handleSearch = (term: string) => {
@@ -66,34 +70,48 @@ const Dashboard = () => {
       console.log("error deleting multiples applications", error);
     }
   };
+  // if (loading) {
+  //   return <p>Loading applications...</p>;
+  // }
 
   return (
     <div>
       <h1>Dashboard</h1>
+
       <Search onSearch={handleSearch} />
       <StatusFilter onStatusChange={handleStatusFilter} />
       <NewApplicationForm onSubmit={handleNewApplicationSubmit} />
+
       <button onClick={handleDeleteMultipleApplications}>
         Delete multiple
       </button>
 
-      {data && (
-        <>
-          {data.applications.map((application) => (
-            <DisplayCard
-              key={application.id}
-              application={application}
-              onSuccess={refetch}
-              selectedIds={selectedIds}
-              setSelectedIds={setSelectedIds}
-            />
-          ))}
-          <Pagination
-            currentPage={data.pagination.page}
-            totalPages={data.pagination.totalPages}
-            onPageChange={setPage}
+      {error && <p>{error}</p>}
+
+      {loading && <p>Loading applications...</p>}
+
+      {!loading && data && data.applications.length === 0 && (
+        <p>No applications found.</p>
+      )}
+
+      {!loading &&
+        data &&
+        data.applications.map((application) => (
+          <DisplayCard
+            key={application.id}
+            application={application}
+            onSuccess={refetch}
+            selectedIds={selectedIds}
+            setSelectedIds={setSelectedIds}
           />
-        </>
+        ))}
+
+      {!loading && data && (
+        <Pagination
+          currentPage={data.pagination.page}
+          totalPages={data.pagination.totalPages}
+          onPageChange={setPage}
+        />
       )}
     </div>
   );

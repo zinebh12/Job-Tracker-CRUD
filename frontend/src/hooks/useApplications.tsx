@@ -29,9 +29,8 @@ export function useApplications(
           setData(response);
           setError(null);
         }
-      } catch (err) {
+      } catch {
         if (!cancelled) setError("Error fetching applications");
-        console.error(err);
       } finally {
         if (!cancelled) setLoading(false);
       }

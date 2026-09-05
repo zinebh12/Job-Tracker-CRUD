@@ -4,6 +4,7 @@ import type {
 } from "./../types/applications";
 import { useState } from "react";
 const NewApplicationForm = ({ onSubmit }: NewApplicationFormProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<{
     company: string;
     position: string;
@@ -121,7 +122,9 @@ const NewApplicationForm = ({ onSubmit }: NewApplicationFormProps) => {
         }}
         placeholder="Notes"
       ></textarea>
-      <button type="submit">Add Application</button>
+      <button disabled={isSubmitting}>
+        {isSubmitting ? "Saving..." : "Save Changes"}
+      </button>
     </form>
   );
 };
