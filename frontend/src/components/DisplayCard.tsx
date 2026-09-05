@@ -1,13 +1,13 @@
 import { useState } from "react";
 import type { Application, ApplicationStatus } from "./../types/applications";
 import EditApplication from "./EditApplication";
-import { editApplication } from "../services/applicationApi";
+import { editApplication, deleteApplication } from "../services/applicationApi";
 const DisplayCard = ({
   application,
-  onEditSuccess,
+  onSuccess,
 }: {
   application: Application;
-  onEditSuccess: () => void;
+  onSuccess: () => void;
 }) => {
   const [openEditApplication, setOpenEditApplication] = useState(false);
   const handleEditApplication = async (
@@ -33,10 +33,19 @@ const DisplayCard = ({
         salary,
         notes,
       });
-      onEditSuccess();
+      onSuccess();
       setOpenEditApplication(false);
     } catch (error) {
       console.error("Error creating application:", error);
+    }
+  };
+
+  const handleDeleteApplication = async () => {
+    try {
+      await deleteApplication(application.id);
+      onSuccess();
+    } catch (error) {
+      console.log("Error deleting applicatin", error);
     }
   };
 
@@ -63,6 +72,7 @@ const DisplayCard = ({
           application={application}
         />
       )}
+      <button onClick={handleDeleteApplication}>Delete</button>
     </div>
   );
 };

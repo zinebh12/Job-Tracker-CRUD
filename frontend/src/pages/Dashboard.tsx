@@ -67,7 +67,7 @@ const Dashboard = () => {
             <DisplayCard
               key={application.id}
               application={application}
-              onEditSuccess={refetch}
+              onSuccess={refetch}
             />
           ))}
           <Pagination

@@ -29,8 +29,6 @@ const EditApplication = ({ application, onEdit }: EditApplicationProps) => {
 
   const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("FORM Edited!");
-    console.log("formdata", formData);
     onEdit(
       formData.id,
       formData.company,
