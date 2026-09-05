@@ -35,3 +35,17 @@ export interface SearchProps {
 export interface StatusFilterProps {
   onStatusChange: (status: string) => void;
 }
+
+export type ApplicationStatus = "Applied" | "Interview" | "Offer" | "Rejected";
+
+export interface NewApplicationFormProps {
+  onSubmit: (
+    company: string,
+    position: string,
+    location: string,
+    status: ApplicationStatus,
+    date_applied: Date | null,
+    salary: number | null,
+    notes: string,
+  ) => void;
+}

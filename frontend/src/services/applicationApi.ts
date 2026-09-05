@@ -1,4 +1,7 @@
-import type { ApplicationsResponse } from "./../types/applications";
+import type {
+  Application,
+  ApplicationsResponse,
+} from "./../types/applications";
 
 const API_BASE_URL = "http://localhost:5000/api/applications";
 
@@ -24,5 +27,21 @@ export const getApplications = async (
     throw new Error("Failed to fetch applications");
   }
 
+  return response.json();
+};
+
+export const createApplication = async (
+  application: Omit<Application, "id" | "created_at">,
+) => {
+  const response = await fetch(`${API_BASE_URL}`, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(application),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to create application");
+  }
   return response.json();
 };

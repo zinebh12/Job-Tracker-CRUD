@@ -123,7 +123,7 @@ app.post("/api/applications", async (req, res) => {
     const result = await pool.query(
       `INSERT INTO applications
        (company, position, location, status, date_applied, salary, notes)
-       valuesS ($1, $2, $3, $4, $5, $6, $7)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
        RETURNING *`,
       [company, position, location, status, date_applied, salary, notes],
     );
