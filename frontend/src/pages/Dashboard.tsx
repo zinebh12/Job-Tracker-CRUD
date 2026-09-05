@@ -1,48 +1,20 @@
-import {
-  getApplications,
-  createApplication,
-} from "./../services/applicationApi";
-import { useEffect, useState } from "react";
+import { createApplication } from "./../services/applicationApi";
+import { useState } from "react";
 import DisplayCard from "../components/DisplayCard";
-import type {
-  ApplicationsResponse,
-  ApplicationStatus,
-} from "../types/applications";
+import type { ApplicationStatus } from "../types/applications";
 import Pagination from "../components/Pagination";
 import Search from "../components/Search";
 import StatusFilter from "../components/StatusFilter";
 import NewApplicationForm from "../components/NewApplicationForm";
+import { useApplications } from "../hooks/useApplications";
 const Dashboard = () => {
-  const [data, setData] = useState<ApplicationsResponse | null>(null);
+  // const [data, setData] = useState<ApplicationsResponse | null>(null);
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [refreshFlag, setRefreshFlag] = useState(0);
+  // const [refreshFlag, setRefreshFlag] = useState(0);
   // Fetch applications from the backend API
-
-  useEffect(() => {
-    let cancelled = false;
-    const fetchApplications = async () => {
-      try {
-        const response = await getApplications(
-          page,
-          10,
-          searchTerm,
-          statusFilter,
-        );
-        if (!cancelled) setData(response);
-        // console.log(data);
-      } catch (error) {
-        console.error("Error fetching applications:", error);
-      }
-    };
-    fetchApplications();
-    return () => {
-      cancelled = true;
-    };
-  }, [page, searchTerm, statusFilter, refreshFlag]);
-
-  const refetchApplication = () => setRefreshFlag((f) => f + 1);
+  const { data, refetch } = useApplications(page, searchTerm, statusFilter);
 
   // handle search
   const handleSearch = (term: string) => {
@@ -77,7 +49,7 @@ const Dashboard = () => {
         salary,
         notes,
       });
-      refetchApplication();
+      refetch();
     } catch (error) {
       console.error("Error creating application:", error);
     }
@@ -92,7 +64,11 @@ const Dashboard = () => {
       {data && (
         <>
           {data.applications.map((application) => (
-            <DisplayCard key={application.id} application={application} />
+            <DisplayCard
+              key={application.id}
+              application={application}
+              onEditSuccess={refetch}
+            />
           ))}
           <Pagination
             currentPage={data.pagination.page}

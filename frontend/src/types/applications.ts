@@ -49,3 +49,28 @@ export interface NewApplicationFormProps {
     notes: string,
   ) => void;
 }
+
+export interface UpdateApplication {
+  id: number;
+  company: string;
+  position: string;
+  location: string;
+  status: ApplicationStatus;
+  date_applied: string | null;
+  salary: number | null;
+  notes: string;
+}
+
+export interface EditApplicationProps {
+  application: Application;
+  onEdit: (
+    id: number,
+    company: string,
+    position: string,
+    location: string,
+    status: ApplicationStatus,
+    date_applied: Date | null,
+    salary: number | null,
+    notes: string,
+  ) => void;
+}

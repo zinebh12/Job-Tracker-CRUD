@@ -1,6 +1,7 @@
 import type {
   Application,
   ApplicationsResponse,
+  UpdateApplication
 } from "./../types/applications";
 
 const API_BASE_URL = "http://localhost:5000/api/applications";
@@ -42,6 +43,22 @@ export const createApplication = async (
   });
   if (!response.ok) {
     throw new Error("Failed to create application");
+  }
+  return response.json();
+};
+
+export const editApplication = async (
+  application: UpdateApplication,
+) => {
+  const response = await fetch(`${API_BASE_URL}/${application.id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(application),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch application");
   }
   return response.json();
 };
