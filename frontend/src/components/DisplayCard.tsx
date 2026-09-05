@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Application, ApplicationStatus } from "./../types/applications";
 import EditApplication from "./EditApplication";
 import { editApplication, deleteApplication } from "../services/applicationApi";
+import { useNavigate } from "react-router-dom";
 const DisplayCard = ({
   application,
   onSuccess,
@@ -9,6 +10,7 @@ const DisplayCard = ({
   application: Application;
   onSuccess: () => void;
 }) => {
+  const navigate = useNavigate();
   const [openEditApplication, setOpenEditApplication] = useState(false);
   const handleEditApplication = async (
     id: number,
@@ -73,6 +75,9 @@ const DisplayCard = ({
         />
       )}
       <button onClick={handleDeleteApplication}>Delete</button>
+      <button onClick={() => navigate(`/application/${application.id}`)}>
+        View details
+      </button>
     </div>
   );
 };

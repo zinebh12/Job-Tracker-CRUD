@@ -67,3 +67,13 @@ export const deleteApplication = async (id: number) => {
     throw new Error("Failed to delete application");
   }
 };
+
+export const getApplicationDetails = async (
+  id: number,
+): Promise<Application> => {
+  const response = await fetch(`${API_BASE_URL}/${id}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch application");
+  }
+  return response.json();
+};
