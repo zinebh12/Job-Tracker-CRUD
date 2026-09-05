@@ -19,3 +19,9 @@ export const applicationQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(10),
 });
+
+export const deleteApplicationsSchema = z.object({
+  ids: z
+    .array(z.number().int().positive())
+    .min(1, "At least one application ID is required"),
+});

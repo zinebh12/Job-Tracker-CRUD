@@ -6,9 +6,13 @@ import { useNavigate } from "react-router-dom";
 const DisplayCard = ({
   application,
   onSuccess,
+  selectedIds,
+  setSelectedIds,
 }: {
   application: Application;
   onSuccess: () => void;
+  selectedIds: number[];
+  setSelectedIds: React.Dispatch<React.SetStateAction<number[]>>;
 }) => {
   const navigate = useNavigate();
   const [openEditApplication, setOpenEditApplication] = useState(false);
@@ -53,6 +57,17 @@ const DisplayCard = ({
 
   return (
     <div className="border p-4 rounded shadow-md mb-4">
+      <input
+        type="checkbox"
+        checked={selectedIds.includes(application.id)}
+        onChange={() => {
+          setSelectedIds((current) =>
+            current.includes(application.id)
+              ? current.filter((id) => id !== application.id)
+              : [...current, application.id],
+          );
+        }}
+      />
       <p>Company: {application.company}</p>
       <p>Position: {application.position}</p>
       <p>Location: {application.location}</p>

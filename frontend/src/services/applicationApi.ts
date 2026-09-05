@@ -77,3 +77,19 @@ export const getApplicationDetails = async (
   }
   return response.json();
 };
+
+export const deleteSelectedApplications = async (ids: number[]) => {
+  const response = await fetch(`${API_BASE_URL}`, {
+    method: "DELETE",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({ ids }),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+
+    throw new Error(error.error || "Failed to delete applications");
+  }
+  return response.json();
+};

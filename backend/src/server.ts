@@ -5,6 +5,7 @@ import {
   applicationSchema,
   updateApplicationSchema,
   applicationQuerySchema,
+  deleteApplicationsSchema,
 } from "./../schemas/applicationSchema.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 const app = express();
@@ -207,6 +208,42 @@ app.delete("/api/applications/:id", async (req, res) => {
     res.json(deleteApplication.rows[0]);
   } catch (err: any) {
     console.error(err.message);
+    res.status(500).json({
+      error: "Failed to delete application",
+    });
+  }
+});
+
+//DELETE mutiple
+app.delete("/api/applications", async (req, res) => {
+  try {
+    const validatedData = deleteApplicationsSchema.safeParse(req.body);
+    if (!validatedData.success) {
+      return res.status(400).json({
+        error: "Validation failed",
+        details: validatedData.error.issues,
+      });
+    }
+    const { ids } = validatedData.data;
+    const result = await pool.query(
+      `DELETE FROM applications
+       WHERE id = ANY($1::int[])
+       RETURNING *`,
+      [ids],
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: "No applications found",
+      });
+    }
+    res.json({
+      message: "Applications deleted successfully",
+      deletedCount: result.rows.length,
+      applications: result.rows,
+    });
+  } catch (error) {
+    console.error(error);
     res.status(500).json({
       error: "Failed to delete application",
     });

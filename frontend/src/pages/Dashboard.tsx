@@ -1,4 +1,7 @@
-import { createApplication } from "./../services/applicationApi";
+import {
+  createApplication,
+  deleteSelectedApplications,
+} from "./../services/applicationApi";
 import { useState } from "react";
 import DisplayCard from "../components/DisplayCard";
 import type { ApplicationStatus } from "../types/applications";
@@ -8,11 +11,10 @@ import StatusFilter from "../components/StatusFilter";
 import NewApplicationForm from "../components/NewApplicationForm";
 import { useApplications } from "../hooks/useApplications";
 const Dashboard = () => {
-  // const [data, setData] = useState<ApplicationsResponse | null>(null);
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  // const [refreshFlag, setRefreshFlag] = useState(0);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
   // Fetch applications from the backend API
   const { data, refetch } = useApplications(page, searchTerm, statusFilter);
 
@@ -55,12 +57,26 @@ const Dashboard = () => {
     }
   };
 
+  const handleDeleteMultipleApplications = async () => {
+    try {
+      await deleteSelectedApplications(selectedIds);
+      setSelectedIds([]);
+      refetch();
+    } catch (error) {
+      console.log("error deleting multiples applications", error);
+    }
+  };
+
   return (
     <div>
       <h1>Dashboard</h1>
       <Search onSearch={handleSearch} />
       <StatusFilter onStatusChange={handleStatusFilter} />
       <NewApplicationForm onSubmit={handleNewApplicationSubmit} />
+      <button onClick={handleDeleteMultipleApplications}>
+        Delete multiple
+      </button>
+
       {data && (
         <>
           {data.applications.map((application) => (
@@ -68,6 +84,8 @@ const Dashboard = () => {
               key={application.id}
               application={application}
               onSuccess={refetch}
+              selectedIds={selectedIds}
+              setSelectedIds={setSelectedIds}
             />
           ))}
           <Pagination
