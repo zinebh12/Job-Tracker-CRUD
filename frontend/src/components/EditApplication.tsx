@@ -125,7 +125,7 @@ const EditApplication = ({ application, onEdit, onCancel }: EditApplicationProps
         placeholder="Notes"
       ></textarea>
       <button type="submit">Save Changes</button>
-      <button onClick={onCancel}>Cancel</button>
+      <button type="button" onClick={onCancel}>Cancel</button>
     </form>
   );
 };
