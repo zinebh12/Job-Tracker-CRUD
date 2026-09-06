@@ -48,9 +48,13 @@ export interface NewApplicationFormProps {
   notes: string;
 }
 
+export type OnCancel = () => void;
+
 export interface NewApplicationFormSubmit {
   onSubmit: (application: NewApplicationFormProps) => Promise<void>;
+  onCancel: OnCancel;
 }
+
 export interface UpdateApplication {
   id: number;
   company: string;
@@ -65,4 +69,5 @@ export interface UpdateApplication {
 export interface EditApplicationProps {
   application: Application;
   onEdit: (application: UpdateApplication) => Promise<void>;
+  onCancel: OnCancel;
 }

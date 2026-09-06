@@ -16,6 +16,7 @@ const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [openNewApplicationForm, setOpenNewApplicationForm] = useState(false);
 
   const { data, refetch, loading, error } = useApplications(
     page,
@@ -33,6 +34,9 @@ const Dashboard = () => {
     setPage(1);
   };
 
+  const handleOpenApplicationForm = () =>
+    setOpenNewApplicationForm(!openNewApplicationForm);
+
   return (
     <div>
       <h1>Dashboard</h1>
@@ -41,11 +45,17 @@ const Dashboard = () => {
 
       <StatusFilter onStatusChange={handleStatusFilter} />
 
-      <NewApplicationForm
-        onSubmit={(application) =>
-          handleCreateApplication(application, refetch)
-        }
-      />
+      {openNewApplicationForm && (
+        <NewApplicationForm
+          onSubmit={(application) =>
+            handleCreateApplication(application, refetch)
+          }
+          onCancel={handleOpenApplicationForm}
+        />
+      )}
+      <button onClick={handleOpenApplicationForm}>
+        Create New Application
+      </button>
 
       <button
         onClick={() =>

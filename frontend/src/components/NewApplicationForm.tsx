@@ -3,7 +3,7 @@ import type {
   ApplicationStatus,
 } from "./../types/applications";
 import { useState } from "react";
-const NewApplicationForm = ({ onSubmit }: NewApplicationFormSubmit) => {
+const NewApplicationForm = ({ onSubmit, onCancel }: NewApplicationFormSubmit) => {
   const [formData, setFormData] = useState<{
     company: string;
     position: string;
@@ -128,6 +128,7 @@ const NewApplicationForm = ({ onSubmit }: NewApplicationFormSubmit) => {
         placeholder="Notes"
       ></textarea>
       <button type="submit">create</button>
+      <button onClick={onCancel}>Cancel</button>
     </form>
   );
 };

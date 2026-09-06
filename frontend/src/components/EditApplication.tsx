@@ -4,7 +4,7 @@ import type {
 } from "./../types/applications";
 // import { editApplication } from "../services/applicationApi";
 import { useState } from "react";
-const EditApplication = ({ application, onEdit }: EditApplicationProps) => {
+const EditApplication = ({ application, onEdit, onCancel }: EditApplicationProps) => {
   const [formData, setFormData] = useState<{
     id: number;
     company: string;
@@ -125,6 +125,7 @@ const EditApplication = ({ application, onEdit }: EditApplicationProps) => {
         placeholder="Notes"
       ></textarea>
       <button type="submit">Save Changes</button>
+      <button onClick={onCancel}>Cancel</button>
     </form>
   );
 };

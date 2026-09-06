@@ -19,6 +19,8 @@ const DisplayCard = ({
 }) => {
   const navigate = useNavigate();
   const [openEditApplication, setOpenEditApplication] = useState(false);
+  const handleEditApplicationOpen = () =>
+    setOpenEditApplication(!openEditApplication);
 
   return (
     <div className="border p-4 rounded shadow-md mb-4">
@@ -49,6 +51,7 @@ const DisplayCard = ({
             handleEditApplication(application, onSuccess)
           }
           application={application}
+          onCancel={handleEditApplicationOpen}
         />
       )}
       <button
