@@ -76,7 +76,17 @@ const DisplayCard = ({
 
         {/* Status */}
         <td className="px-2 py-3 sm:px-3 sm:py-4">
-          <span className="whitespace-nowrap rounded-full bg-green px-2 py-1 text-[10px] font-semibold text-white sm:px-3 sm:text-xs">
+          <span
+            className={`whitespace-nowrap rounded-full px-2 py-1 text-[10px] font-semibold sm:px-3 sm:text-xs ${
+              application.status === "Applied"
+                ? "bg-sage-light text-forest"
+                : application.status === "Interview"
+                  ? "bg-amber-100 text-amber-800"
+                  : application.status === "Offer"
+                    ? "bg-green-100 text-green"
+                    : "bg-red-100 text-red-700"
+            }`}
+          >
             {application.status}
           </span>
         </td>
@@ -94,7 +104,7 @@ const DisplayCard = ({
         </td>
 
         {/* Actions */}
-              {/* <td className="px-2 py-3 sm:px-3 sm:py-4">
+        {/* <td className="px-2 py-3 sm:px-3 sm:py-4">
 
             <button
               onClick={() => setOpenEditApplication(!openEditApplication)}

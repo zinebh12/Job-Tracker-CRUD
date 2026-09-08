@@ -159,7 +159,17 @@ const ApplicationDetails = ({
                 </div>
               </div>
 
-              <span className="w-fit shrink-0 rounded-full bg-green px-4 py-2 text-sm font-semibold text-white">
+              <span
+                className={`w-fit shrink-0 rounded-full  px-4 py-2 text-sm font-semibold ${
+                  application.status === "Applied"
+                    ? "bg-sage-light text-forest"
+                    : application.status === "Interview"
+                      ? "bg-amber-100 text-amber-800"
+                      : application.status === "Offer"
+                        ? "bg-green-100 text-green"
+                        : "bg-red-100 text-red-700"
+                }`}
+              >
                 {application.status}
               </span>
             </div>
