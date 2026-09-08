@@ -34,6 +34,7 @@ export interface SearchProps {
 
 export interface StatusFilterProps {
   onStatusChange: (status: string) => void;
+  selectedStatus: string;
 }
 
 export type ApplicationStatus = "Applied" | "Interview" | "Offer" | "Rejected";
@@ -71,3 +72,8 @@ export interface EditApplicationProps {
   onEdit: (application: UpdateApplication) => Promise<void>;
   onCancel: OnCancel;
 }
+
+export type ToastState = {
+  type: "success" | "error" | "";
+  message: string;
+} | null;

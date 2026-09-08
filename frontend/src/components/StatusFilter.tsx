@@ -1,28 +1,30 @@
 import type { StatusFilterProps } from "../types/applications";
-import { useState } from "react";
-const StatusFilter = ({ onStatusChange }: StatusFilterProps) => {
-//   const [selectedStatus, setSelectedStatus] = useState("");
 
-//   const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-//     const selectedStatus = event.target.value;
-//     setSelectedStatus(selectedStatus);
-//     onStatusChange(selectedStatus);
-//     console.log("Selected status:", selectedStatus);
-//     // You can implement the logic to filter applications based on the selected status here
-//   };
+const StatusFilter = ({
+  onStatusChange,
+  selectedStatus,
+}: StatusFilterProps) => {
+  const statuses = [
+    { label: "All", value: "" },
+    { label: "Applied", value: "Applied" },
+    { label: "Interview", value: "Interview" },
+    { label: "Offer", value: "Offer" },
+    { label: "Rejected", value: "Rejected" },
+  ];
 
   return (
-    <select
-    //   value={selectedStatus}
-      onChange={(event) => onStatusChange(event.target.value)}
-      defaultValue=""
-    >
-      <option value="">All Statuses</option>
-      <option value="Applied">Applied</option>
-      <option value="Interview">Interview</option>
-      <option value="Offer">Offer</option>
-      <option value="Rejected">Rejected</option>
-    </select>
+    <div className="flex flex-wrap gap-2 sm:gap-3">
+      {statuses.map((status) => (
+        <button
+          key={status.value}
+          type="button"
+          onClick={() => onStatusChange(status.value)}
+          className={`cursor-pointer rounded-full px-3 py-1.5 text-xs font-medium transition-colors sm:px-4 sm:py-2 sm:text-sm ${selectedStatus === status.value ? "bg-deep-forest text-white" : "bg-white text-forest hover:bg-sage"}`}
+        >
+          {status.label}
+        </button>
+      ))}
+    </div>
   );
 };
 
