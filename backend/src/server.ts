@@ -64,6 +64,39 @@ app.get("/api/applications", async (req, res) => {
     const applications = await pool.query(query, paginationValues);
     const totalPages = Math.ceil(total / limit);
 
+    // Total applications by status
+    const statsQuery = `
+      SELECT
+        COUNT(*) AS total,
+        COUNT(*) FILTER (
+          WHERE status IN ('Applied', 'Interview', 'Offer')
+        ) AS active,
+        COUNT(*) FILTER (
+          WHERE status = 'Applied'
+        ) AS applied,
+        COUNT(*) FILTER (
+          WHERE status = 'Interview'
+        ) AS interview,
+        COUNT(*) FILTER (
+          WHERE status = 'Offer'
+        ) AS offer,
+        COUNT(*) FILTER (
+          WHERE status = 'Rejected'
+        ) AS rejected
+      FROM applications
+    `;
+
+    const statsResult = await pool.query(statsQuery);
+
+    const stats = {
+      total: Number(statsResult.rows[0].total),
+      active: Number(statsResult.rows[0].active),
+      applied: Number(statsResult.rows[0].applied),
+      interview: Number(statsResult.rows[0].interview),
+      offer: Number(statsResult.rows[0].offer),
+      rejected: Number(statsResult.rows[0].rejected),
+    };
+
     res.json({
       applications: applications.rows,
       pagination: {
@@ -72,6 +105,7 @@ app.get("/api/applications", async (req, res) => {
         limit,
         totalPages,
       },
+      stats,
     });
     // console.log(applications.rows);
   } catch (err: any) {

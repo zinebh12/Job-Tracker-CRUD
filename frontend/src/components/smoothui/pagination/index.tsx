@@ -193,7 +193,7 @@ export default function Pagination({
                 aria-label={`Go to page ${String(item)}`}
                 className={cn(
                   "relative size-9",
-                  isActive ? "text-foreground" : "text-muted-foreground"
+                  isActive ? "text-foreground text-white" : "text-muted-foreground"
                 )}
                 onClick={() => onPageChange(item)}
                 size="icon"
@@ -202,7 +202,7 @@ export default function Pagination({
               >
                 {isActive && (
                   <motion.span
-                    className="absolute inset-0 rounded-md border bg-background shadow-sm"
+                    className="absolute inset-0 rounded-full border bg-deep-forest shadow-sm"
                     layout
                     layoutId={layoutId}
                     style={{ originY: "0px" }}

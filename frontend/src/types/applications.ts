@@ -17,9 +17,19 @@ export interface Pagination {
   totalPages: number;
 }
 
+export interface Stats {
+    total: number;
+    active: number;
+    applied: number;
+    interview: number;
+    offer: number;
+    rejected: number;
+}
+
 export interface ApplicationsResponse {
   applications: Application[];
   pagination: Pagination;
+  stats: Stats;
 }
 
 export interface PaginationProps {

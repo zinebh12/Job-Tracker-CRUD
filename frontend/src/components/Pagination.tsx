@@ -7,11 +7,14 @@ const Pagination = ({
   onPageChange,
 }: PaginationProps) => {
   return (
-    <PaginationUI
-      page={currentPage}
-      totalPages={totalPages}
-      onPageChange={onPageChange}
-    />
+    <div className="flex w-full justify-center py-2">
+      <PaginationUI
+        page={currentPage}
+        totalPages={totalPages}
+        onPageChange={onPageChange}
+        className="text-forest"
+      />
+    </div>
   );
 };
 

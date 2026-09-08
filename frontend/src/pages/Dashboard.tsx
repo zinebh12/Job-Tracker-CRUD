@@ -13,6 +13,7 @@ import LoadingState from "@/components/states/LoadingState";
 import { NoResultState } from "@/components/states/NoResultState";
 import ConfirmDeleteState from "@/components/states/ConfirmDeleteState";
 import type { ToastState } from "@/types/applications";
+import Statistics from "@/components/Statistics";
 
 const Dashboard = ({
   setToast,
@@ -88,8 +89,8 @@ const Dashboard = ({
               <span className="sm:hidden"> New </span>
             </button>
           </div>
-
           <div className="space-y-4 px-4">
+          <Statistics data={data} />
             {/* Filters */}
             <StatusFilter
               onStatusChange={handleStatusFilter}
