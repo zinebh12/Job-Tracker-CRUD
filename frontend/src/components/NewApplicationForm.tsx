@@ -18,8 +18,23 @@ const NewApplicationForm = ({
     salary: "",
     notes: "",
   });
+  const [errors, setErrors] = useState({
+    company: "",
+    position: "",
+  });
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const newErrors = { company: "", position: "" };
+    if (!formData.company.trim()) {
+      newErrors.company = "Company name is required.";
+    }
+    if (!formData.position.trim()) {
+      newErrors.position = "Position name is required.";
+    }
+    setErrors(newErrors);
+    if (newErrors.company || newErrors.position) {
+      return;
+    }
     onSubmit({
       company: formData.company,
       position: formData.position,
@@ -65,34 +80,60 @@ const NewApplicationForm = ({
           {/* Company */}
           <div>
             <label className="mb-2 block text-sm font-semibold text-deep-forest">
-              Company
+              Company <span className="text-red-500">*</span>
             </label>
             <input
               value={formData.company}
-              onChange={(e) =>
-                setFormData({ ...formData, company: e.target.value })
-              }
+              onChange={(e) => {
+                setFormData({
+                  ...formData,
+                  company: e.target.value,
+                });
+
+                setErrors({
+                  ...errors,
+                  company: "",
+                });
+              }}
               type="text"
               placeholder="Company Name"
-              required
-              className={inputClass}
+              className={`${inputClass} ${
+                errors.company ? "border-red-500" : "border-sage"
+              }`}
             />
+
+            {errors.company && (
+              <p className="mt-1 text-xs text-red-600">{errors.company}</p>
+            )}
           </div>
           {/* Position */}
           <div>
             <label className="mb-2 block text-sm font-semibold text-deep-forest">
-              Position
+              Position <span className="text-red-500">*</span>
             </label>
             <input
               value={formData.position}
-              onChange={(e) =>
-                setFormData({ ...formData, position: e.target.value })
-              }
+              onChange={(e) => {
+                setFormData({
+                  ...formData,
+                  position: e.target.value,
+                });
+
+                setErrors({
+                  ...errors,
+                  position: "",
+                });
+              }}
               type="text"
               placeholder="Position"
-              required
-              className={inputClass}
+              className={`${inputClass} ${
+                errors.position ? "border-red-500" : "border-sage"
+              }`}
             />
+
+            {errors.position && (
+              <p className="mt-1 text-xs text-red-600">{errors.position}</p>
+            )}
           </div>
           {/* Location */}
           <div>

@@ -22,10 +22,24 @@ const EditApplication = ({
     salary: application.salary?.toString() ?? "",
     notes: application.notes ?? "",
   });
+  const [errors, setErrors] = useState({
+    company: "",
+    position: "",
+  });
 
   const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    const newErrors = { company: "", position: "" };
+    if (!formData.company.trim()) {
+      newErrors.company = "Company name is required.";
+    }
+    if (!formData.position.trim()) {
+      newErrors.position = "Position name is required.";
+    }
+    setErrors(newErrors);
+    if (newErrors.company || newErrors.position) {
+      return;
+    }
     onEdit({
       id: formData.id,
       company: formData.company,
@@ -82,17 +96,27 @@ const EditApplication = ({
 
             <input
               value={formData.company}
-              onChange={(e) =>
+              onChange={(e) => {
                 setFormData({
                   ...formData,
                   company: e.target.value,
-                })
-              }
+                });
+
+                setErrors({
+                  ...errors,
+                  company: "",
+                });
+              }}
               type="text"
-              required
-              className={inputClass}
               placeholder="Company Name"
+              className={`${inputClass} ${
+                errors.company ? "border-red-500" : "border-sage"
+              }`}
             />
+
+            {errors.company && (
+              <p className="mt-1 text-xs text-red-600">{errors.company}</p>
+            )}
           </div>
 
           <div>
@@ -102,17 +126,27 @@ const EditApplication = ({
 
             <input
               value={formData.position}
-              onChange={(e) =>
+              onChange={(e) => {
                 setFormData({
                   ...formData,
                   position: e.target.value,
-                })
-              }
+                });
+
+                setErrors({
+                  ...errors,
+                  position: "",
+                });
+              }}
               type="text"
-              required
-              className={inputClass}
               placeholder="Position"
+              className={`${inputClass} ${
+                errors.position ? "border-red-500" : "border-sage"
+              }`}
             />
+
+            {errors.position && (
+              <p className="mt-1 text-xs text-red-600">{errors.position}</p>
+            )}
           </div>
 
           <div>

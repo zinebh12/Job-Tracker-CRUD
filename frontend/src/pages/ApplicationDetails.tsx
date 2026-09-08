@@ -115,7 +115,7 @@ const ApplicationDetails = ({
 
                 {/* Title + actions */}
                 <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:gap-4">
-                  <h1 className="wrap-break-word font-display text-3xl text-deep-forest sm:text-4xl lg:text-5xl">
+                  <h1 className="capitalize wrap-break-word font-display text-3xl text-deep-forest sm:text-4xl lg:text-5xl">
                     {application.position}
                   </h1>
 
