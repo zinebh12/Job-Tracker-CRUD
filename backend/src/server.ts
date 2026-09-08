@@ -3,11 +3,13 @@ import cors from "cors";
 import applicationRoutes from "./routes/applicationRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/applications", applicationRoutes);
 app.use("/api/auth", authRoutes);
