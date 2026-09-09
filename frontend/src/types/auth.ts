@@ -15,3 +15,9 @@ export interface LoginData {
   password: string;
 }
 
+export interface AuthContextType {
+  user: User | null;
+  loading: boolean;
+  login: (data: LoginData) => Promise<void>;
+  logout: () => Promise<void>;
+}
