@@ -2,12 +2,30 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-const Header = ({ onOpen }: { onOpen: () => void }) => {
+import type { ToastState } from "@/types/applications";
+const Header = ({
+  onOpen,
+  setToast,
+}: {
+  onOpen: () => void;
+  setToast: React.Dispatch<React.SetStateAction<ToastState>>;
+}) => {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const handleLogout = async () => {
-    await logout();
-    navigate("/register");
+    try {
+      await logout();
+      setToast({
+        type: "success",
+        message: "Logged out successfully!",
+      });
+      navigate("/register");
+    } catch (error) {
+      setToast({
+        type: "error",
+        message: error instanceof Error ? error.message : "Failed to log out.",
+      });
+    }
   };
   return (
     <div className="flex w-full items-center justify-between gap-4 border-b border-sage bg-white px-4 py-4 sm:px-6 sm:py-5">
@@ -22,7 +40,7 @@ const Header = ({ onOpen }: { onOpen: () => void }) => {
         <span className="hidden sm:inline"> New Application </span>
         <span className="sm:hidden"> New </span>
       </button>
-      <button onClick={handleLogout} >Logout</button>
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };

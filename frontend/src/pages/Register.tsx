@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { register } from "@/services/authApi";
 import { useNavigate } from "react-router-dom";
-const Register = () => {
+import type { ToastState } from "@/types/applications";
+const Register = ({
+  setToast,
+}: {
+  setToast: React.Dispatch<React.SetStateAction<ToastState>>;
+}) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -14,9 +19,17 @@ const Register = () => {
       const response = await register(formData);
       console.log("Registration successful:", response);
       // redirect to login
+      setToast({
+        type: "success",
+        message: "Account created successfully!",
+      });
       navigate("/login");
     } catch (error) {
-      console.error("Registration failed:", error);
+      setToast({
+        type: "error",
+        message:
+          error instanceof Error ? error.message : "Failed to create account.",
+      });
     }
   };
   return (

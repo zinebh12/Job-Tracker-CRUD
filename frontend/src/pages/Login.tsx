@@ -1,7 +1,12 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-const Login = () => {
+import type { ToastState } from "@/types/applications";
+const Login = ({
+  setToast,
+}: {
+  setToast: React.Dispatch<React.SetStateAction<ToastState>>;
+}) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const { login } = useAuth();
@@ -10,9 +15,16 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(formData);
+      setToast({
+        type: "success",
+        message: "Logged in successfully!",
+      });
       navigate("/dashboard");
     } catch (error) {
-      console.error(error);
+      setToast({
+        type: "error",
+        message: error instanceof Error ? error.message : "Failed to log in.",
+      });
     }
   };
 

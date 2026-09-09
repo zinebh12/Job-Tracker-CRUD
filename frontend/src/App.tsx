@@ -22,8 +22,8 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register setToast={setToast}  />} />
+        <Route path="/login" element={<Login setToast={setToast}  />} />
         <Route element={<ProtectedRoute />}>
           <Route
             path="/dashboard"

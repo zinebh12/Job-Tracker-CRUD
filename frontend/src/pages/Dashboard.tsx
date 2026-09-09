@@ -78,7 +78,7 @@ const Dashboard = ({
 
         {/* Header */}
         <div className="space-y-4 pb-4">
-          <Header onOpen={handleOpenApplicationForm} />
+          <Header onOpen={handleOpenApplicationForm} setToast={setToast} />
           <div className="space-y-4 px-4">
             <Statistics data={data} />
             {/* Filters */}
