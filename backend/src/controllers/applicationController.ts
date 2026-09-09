@@ -6,7 +6,8 @@ import {
   deleteApplicationsSchema,
 } from "../../schemas/applicationSchema.js";
 import { pool } from "../db.js";
-export const getApplications = async (req: Request, res: Response) => {
+import type { authRequest } from "../middleware/authMiddleware.js";
+export const getApplications = async (req: authRequest, res: Response) => {
   try {
     const validatedQuery = applicationQuerySchema.safeParse(req.query);
     if (!validatedQuery.success) {
@@ -17,9 +18,16 @@ export const getApplications = async (req: Request, res: Response) => {
     }
     const { status, location, search, page, limit } = validatedQuery.data;
 
-    let query = "SELECT * FROM applications";
-    const conditions: string[] = [];
-    const values: (string | number)[] = [];
+    if (!req.userId) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+
+    // let query = await pool.query(
+    //   `SELECT * FROM applications WHERE user_id=$1`,
+    //   [user_id],
+    // );
+    const conditions: string[] = ["user_id = $1"];
+    const values: (string | number)[] = [req.userId];
 
     if (status) {
       conditions.push(`status ILIKE $${values.length + 1}`);
@@ -39,18 +47,22 @@ export const getApplications = async (req: Request, res: Response) => {
       values.push(`%${search}%`);
     }
 
-    if (conditions.length > 0) {
-      query += ` WHERE ${conditions.join(" AND ")}`;
-    }
-    const countQuery = query.replace("SELECT *", "SELECT COUNT(*) AS total");
+    // if (conditions.length > 0) {
+    //   query += ` WHERE ${conditions.join(" AND ")}`;
+    // }
+    // const countQuery = query.replace("SELECT *", "SELECT COUNT(*) AS total");
+    const whereClause = `WHERE ${conditions.join(" AND ")}`;
+    // Count applications belonging to this user
+    const countQuery = ` SELECT COUNT(*) AS total FROM applications ${whereClause} `;
     const countResult = await pool.query(countQuery, values);
     const total = Number(countResult.rows[0].total);
 
-    query += " ORDER BY created_at DESC";
+    // query += " ORDER BY created_at DESC";
 
     //pagination
     const offset = (page - 1) * limit;
-    query += ` LIMIT $${values.length + 1} OFFSET $${values.length + 2}`;
+    const query = ` SELECT * FROM applications ${whereClause} ORDER BY created_at DESC LIMIT $${values.length + 1} OFFSET $${values.length + 2} `;
+    // query += ` LIMIT $${values.length + 1} OFFSET $${values.length + 2}`;
     const paginationValues = [...values, limit, offset];
 
     const applications = await pool.query(query, paginationValues);
@@ -76,9 +88,10 @@ export const getApplications = async (req: Request, res: Response) => {
           WHERE status = 'Rejected'
         ) AS rejected
       FROM applications
+      WHERE user_id = $1
     `;
 
-    const statsResult = await pool.query(statsQuery);
+    const statsResult = await pool.query(statsQuery, [req.userId]);
 
     const stats = {
       total: Number(statsResult.rows[0].total),
@@ -109,8 +122,11 @@ export const getApplications = async (req: Request, res: Response) => {
 };
 
 //GET by ID
-export const getApplicationById = async (req: Request, res: Response) => {
+export const getApplicationById = async (req: authRequest, res: Response) => {
   try {
+    if (!req.userId) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
     const id = Number(req.params.id);
     if (Number.isNaN(id)) {
       return res.status(400).json({
@@ -118,8 +134,8 @@ export const getApplicationById = async (req: Request, res: Response) => {
       });
     }
     const application = await pool.query(
-      "SELECT * FROM applications WHERE id = $1",
-      [id],
+      "SELECT * FROM applications WHERE id = $1 AND user_id = $2",
+      [id, req.userId],
     );
     if (application.rows.length === 0) {
       return res.status(404).json({
@@ -135,8 +151,11 @@ export const getApplicationById = async (req: Request, res: Response) => {
 };
 
 //POST
-export const createApplication = async (req: Request, res: Response) => {
+export const createApplication = async (req: authRequest, res: Response) => {
   try {
+    if (!req.userId) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
     const validatedData = applicationSchema.safeParse(req.body);
     if (!validatedData.success) {
       return res.status(400).json({
@@ -149,12 +168,21 @@ export const createApplication = async (req: Request, res: Response) => {
 
     const result = await pool.query(
       `INSERT INTO applications
-       (company, position, location, status, date_applied, salary, notes)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       (company, position, location, status, date_applied, salary, notes, user_id)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
        RETURNING *`,
-      [company, position, location, status, date_applied, salary, notes],
+      [
+        company,
+        position,
+        location,
+        status,
+        date_applied,
+        salary,
+        notes,
+        req.userId,
+      ],
     );
-    res.status(201).json(result.rows[0]);
+    return res.status(201).json(result.rows[0]);
   } catch (err: any) {
     console.error(err.message);
     res.status(500).json({
@@ -164,8 +192,11 @@ export const createApplication = async (req: Request, res: Response) => {
 };
 
 //PATCH
-export const updateApplication = async (req: Request, res: Response) => {
+export const updateApplication = async (req: authRequest, res: Response) => {
   try {
+    if (!req.userId) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
     const validatedData = updateApplicationSchema.safeParse(req.body);
     if (!validatedData.success) {
       return res.status(400).json({
@@ -192,9 +223,19 @@ export const updateApplication = async (req: Request, res: Response) => {
          date_applied = COALESCE($5, date_applied),
          salary = COALESCE($6, salary),
          notes = COALESCE($7, notes)
-       WHERE id = $8
+       WHERE id = $8 AND user_id = $9
        RETURNING *`,
-      [company, position, location, status, date_applied, salary, notes, id],
+      [
+        company,
+        position,
+        location,
+        status,
+        date_applied,
+        salary,
+        notes,
+        id,
+        req.userId,
+      ],
     );
 
     if (updateApplication.rows.length === 0) {
@@ -203,7 +244,7 @@ export const updateApplication = async (req: Request, res: Response) => {
       });
     }
 
-    res.json(updateApplication.rows[0]);
+    return res.json(updateApplication.rows[0]);
   } catch (err: any) {
     console.error(err.message);
     res.status(500).json({
@@ -213,8 +254,11 @@ export const updateApplication = async (req: Request, res: Response) => {
 };
 
 //DELETE
-export const deleteApplication = async (req: Request, res: Response) => {
+export const deleteApplication = async (req: authRequest, res: Response) => {
   try {
+    if (!req.userId) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
     const id = Number(req.params.id);
     if (Number.isNaN(id)) {
       return res.status(400).json({
@@ -222,8 +266,8 @@ export const deleteApplication = async (req: Request, res: Response) => {
       });
     }
     const deleteApplication = await pool.query(
-      "DELETE FROM applications WHERE id = $1 RETURNING *",
-      [id],
+      "DELETE FROM applications WHERE id = $1 AND user_id = $2 RETURNING *",
+      [id, req.userId],
     );
 
     if (deleteApplication.rows.length === 0) {
@@ -242,10 +286,13 @@ export const deleteApplication = async (req: Request, res: Response) => {
 
 //DELETE mutiple
 export const deleteMultipleApplications = async (
-  req: Request,
+  req: authRequest,
   res: Response,
 ) => {
   try {
+    if (!req.userId) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
     const validatedData = deleteApplicationsSchema.safeParse(req.body);
     if (!validatedData.success) {
       return res.status(400).json({
@@ -256,9 +303,10 @@ export const deleteMultipleApplications = async (
     const { ids } = validatedData.data;
     const result = await pool.query(
       `DELETE FROM applications
-       WHERE id = ANY($1::int[])
+       WHERE id = ANY($1::int[]) 
+       AND user_id = $2
        RETURNING *`,
-      [ids],
+      [ids, req.userId],
     );
 
     if (result.rows.length === 0) {
