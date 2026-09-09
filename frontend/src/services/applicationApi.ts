@@ -23,7 +23,9 @@ export const getApplications = async (
   if (status) {
     params.append("status", status);
   }
-  const response = await fetch(`${API_BASE_URL}?${params.toString()}`);
+  const response = await fetch(`${API_BASE_URL}?${params.toString()}`, {
+    credentials: "include",
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch applications");
   }
@@ -36,6 +38,7 @@ export const createApplication = async (
 ) => {
   const response = await fetch(`${API_BASE_URL}`, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-type": "application/json",
     },
@@ -50,6 +53,7 @@ export const createApplication = async (
 export const editApplication = async (application: UpdateApplication) => {
   const response = await fetch(`${API_BASE_URL}/${application.id}`, {
     method: "PATCH",
+    credentials: "include",
     headers: {
       "Content-type": "application/json",
     },
@@ -62,7 +66,10 @@ export const editApplication = async (application: UpdateApplication) => {
 };
 
 export const deleteApplication = async (id: number) => {
-  const response = await fetch(`${API_BASE_URL}/${id}`, { method: "DELETE" });
+  const response = await fetch(`${API_BASE_URL}/${id}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
   if (!response.ok) {
     throw new Error("Failed to delete application");
   }
@@ -71,7 +78,9 @@ export const deleteApplication = async (id: number) => {
 export const getApplicationDetails = async (
   id: number,
 ): Promise<Application> => {
-  const response = await fetch(`${API_BASE_URL}/${id}`);
+  const response = await fetch(`${API_BASE_URL}/${id}`, {
+    credentials: "include",
+  });
   if (!response.ok) {
     throw new Error("Failed to fetch application");
   }
@@ -81,6 +90,7 @@ export const getApplicationDetails = async (
 export const deleteSelectedApplications = async (ids: number[]) => {
   const response = await fetch(`${API_BASE_URL}`, {
     method: "DELETE",
+    credentials: "include",
     headers: {
       "Content-type": "application/json",
     },

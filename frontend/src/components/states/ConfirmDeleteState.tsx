@@ -45,7 +45,7 @@ const ConfirmDeleteState = ({
           type: "success",
           message: "Application deleted successfully!",
         });
-        handleDeleteApplication(id, () => navigate("/"));
+        handleDeleteApplication(id, () => navigate("/dashboard"));
       }
     } catch (error) {
       console.log(error);

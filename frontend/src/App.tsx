@@ -6,6 +6,7 @@ import Toast from "./components/states/Toast";
 import type { ToastState } from "./types/applications";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import ProtectedRoute from "./routes/protectedRoutes";
 function App() {
   const [toast, setToast] = useState<ToastState>(null);
   useEffect(() => {
@@ -23,11 +24,16 @@ function App() {
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard setToast={setToast} />} />
-        <Route
-          path={`/application/:id`}
-          element={<ApplicationDetails setToast={setToast} />}
-        />
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/dashboard"
+            element={<Dashboard setToast={setToast} />}
+          />
+          <Route
+            path={`/application/:id`}
+            element={<ApplicationDetails setToast={setToast} />}
+          />
+        </Route>
       </Routes>
       {toast?.message && (
         <Toast

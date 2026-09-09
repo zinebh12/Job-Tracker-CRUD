@@ -7,8 +7,10 @@ import {
   deleteApplication,
   deleteMultipleApplications,
 } from "../controllers/applicationController.js";
-
+import { authMiddleware } from "../middleware/authMiddleware.js";
 const router = Router();
+
+router.use(authMiddleware)
 
 router.get("/", getApplications);
 router.get("/:id", getApplicationById);

@@ -6,7 +6,7 @@ import StatusFilter from "../components/StatusFilter";
 import NewApplicationForm from "../components/NewApplicationForm";
 import { useApplications } from "../hooks/useApplications";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Checkbox from "@/components/smoothui/checkbox";
 import { handleCreateApplication } from "./../handlers/applicationsHandlers";
 import LoadingState from "@/components/states/LoadingState";
@@ -14,6 +14,8 @@ import { NoResultState } from "@/components/states/NoResultState";
 import ConfirmDeleteState from "@/components/states/ConfirmDeleteState";
 import type { ToastState } from "@/types/applications";
 import Statistics from "@/components/Statistics";
+import Header from "@/components/Header";
+import EmptyState from "@/components/states/EmptyState";
 
 const Dashboard = ({
   setToast,
@@ -76,21 +78,9 @@ const Dashboard = ({
 
         {/* Header */}
         <div className="space-y-4 pb-4">
-          <div className="flex w-full items-center justify-between gap-4 border-b border-sage bg-white px-4 py-4 sm:px-6 sm:py-5">
-            <h1 className="font-display text-3xl text-deep-forest sm:text-4xl lg:text-5xl">
-              Hunter.
-            </h1>
-            <button
-              onClick={handleOpenApplicationForm}
-              className="flex shrink-0 cursor-pointer items-center gap-2 rounded-lg bg-forest px-3 py-2 text-sm text-white transition hover:bg-deep-forest sm:px-4 sm:py-2.5"
-            >
-              <FontAwesomeIcon icon={faPlus} className="text-xs sm:text-sm" />
-              <span className="hidden sm:inline"> New Application </span>
-              <span className="sm:hidden"> New </span>
-            </button>
-          </div>
+          <Header onOpen={handleOpenApplicationForm} />
           <div className="space-y-4 px-4">
-          <Statistics data={data} />
+            <Statistics data={data} />
             {/* Filters */}
             <StatusFilter
               onStatusChange={handleStatusFilter}
@@ -210,7 +200,7 @@ const Dashboard = ({
                     </tbody>
                   </table>
                 </div>
-
+                {data.applications.length === 0 && <EmptyState />}
                 {/* Pagination */}
                 <Pagination
                   currentPage={data.pagination.page}

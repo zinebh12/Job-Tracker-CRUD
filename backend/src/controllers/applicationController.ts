@@ -9,6 +9,9 @@ import { pool } from "../db.js";
 import type { authRequest } from "../middleware/authMiddleware.js";
 export const getApplications = async (req: authRequest, res: Response) => {
   try {
+    if (!req.userId) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
     const validatedQuery = applicationQuerySchema.safeParse(req.query);
     if (!validatedQuery.success) {
       return res.status(400).json({
@@ -18,14 +21,6 @@ export const getApplications = async (req: authRequest, res: Response) => {
     }
     const { status, location, search, page, limit } = validatedQuery.data;
 
-    if (!req.userId) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
-    // let query = await pool.query(
-    //   `SELECT * FROM applications WHERE user_id=$1`,
-    //   [user_id],
-    // );
     const conditions: string[] = ["user_id = $1"];
     const values: (string | number)[] = [req.userId];
 
@@ -47,22 +42,15 @@ export const getApplications = async (req: authRequest, res: Response) => {
       values.push(`%${search}%`);
     }
 
-    // if (conditions.length > 0) {
-    //   query += ` WHERE ${conditions.join(" AND ")}`;
-    // }
-    // const countQuery = query.replace("SELECT *", "SELECT COUNT(*) AS total");
     const whereClause = `WHERE ${conditions.join(" AND ")}`;
     // Count applications belonging to this user
     const countQuery = ` SELECT COUNT(*) AS total FROM applications ${whereClause} `;
     const countResult = await pool.query(countQuery, values);
     const total = Number(countResult.rows[0].total);
 
-    // query += " ORDER BY created_at DESC";
-
     //pagination
     const offset = (page - 1) * limit;
     const query = ` SELECT * FROM applications ${whereClause} ORDER BY created_at DESC LIMIT $${values.length + 1} OFFSET $${values.length + 2} `;
-    // query += ` LIMIT $${values.length + 1} OFFSET $${values.length + 2}`;
     const paginationValues = [...values, limit, offset];
 
     const applications = await pool.query(query, paginationValues);
