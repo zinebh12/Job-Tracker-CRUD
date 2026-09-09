@@ -2,6 +2,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ToastState } from "@/types/applications";
+import LoginForm from "@/components/LoginForm";
 const Login = ({
   setToast,
 }: {
@@ -29,30 +30,33 @@ const Login = ({
   };
 
   return (
-    <div>
-      <h1>Login to your account</h1>
-      <form onSubmit={handleLogin}>
-        <input
-          type="text"
-          placeholder="email"
-          value={formData.email}
-          onChange={(e) => {
-            setFormData({ ...formData, email: e.target.value });
-          }}
-          required
+    <main className="flex min-h-screen items-center justify-center bg-sage-light/30 px-4 py-10">
+      <div className="flex w-full max-w-md flex-col items-center">
+        <div className="mb-6 text-center">
+          <h1 className="text-4xl font-bold tracking-tight text-deep-forest">
+            Login to your account
+          </h1>
+          <p className="mt-2 text-sm text-gray-500">
+            Welcome back to your job application tracker.
+          </p>
+        </div>
+        <LoginForm
+          handleLogin={handleLogin}
+          formData={formData}
+          setFormData={setFormData}
         />
-        <input
-          type="text"
-          placeholder="password"
-          value={formData.password}
-          onChange={(e) => {
-            setFormData({ ...formData, password: e.target.value });
-          }}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
-    </div>
+        <p className="mt-6 text-sm text-gray-500">
+          Don't have an account?{" "}
+          <button
+            type="button"
+            onClick={() => navigate("/register")}
+            className="cursor-pointer font-semibold text-forest transition hover:text-deep-forest hover:underline"
+          >
+            Create one
+          </button>
+        </p>
+      </div>
+    </main>
   );
 };
 
