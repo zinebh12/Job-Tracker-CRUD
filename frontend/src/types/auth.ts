@@ -29,9 +29,11 @@ export type RegisterFormData = {
 };
 
 export interface RegisterAuthFormType {
-  handleFormSubmit: () => Promise<void>;
+  handleFormSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   formData: RegisterFormData;
   setFormData: React.Dispatch<React.SetStateAction<RegisterFormData>>;
+  errors: SetErrors;
+  setErrors: React.Dispatch<React.SetStateAction<SetErrors>>;
 }
 
 export type LoginFormData = { email: string; password: string };
@@ -40,4 +42,13 @@ export interface LoginAuthFormType {
   handleLogin: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   formData: LoginFormData;
   setFormData: React.Dispatch<React.SetStateAction<LoginFormData>>;
+  errors: SetErrors;
+  setErrors: React.Dispatch<React.SetStateAction<SetErrors>>;
+}
+
+export interface SetErrors {
+  name?: string;
+  email?: string;
+  password?: string;
+  general?: string;
 }

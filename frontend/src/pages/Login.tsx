@@ -2,7 +2,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ToastState } from "@/types/applications";
+import type { SetErrors } from "@/types/auth";
 import LoginForm from "@/components/LoginForm";
+import { loginSchema } from "@/schema/authSchema";
+import { z } from "zod";
 const Login = ({
   setToast,
 }: {
@@ -11,9 +14,22 @@ const Login = ({
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const { login } = useAuth();
+  const [errors, setErrors] = useState<SetErrors>({});
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrors({});
+    const result = loginSchema.safeParse(formData);
+    if (!result.success) {
+      const tree = z.treeifyError(result.error);
+
+      setErrors({
+        email: tree.properties?.email?.errors?.[0],
+        password: tree.properties?.password?.errors?.[0],
+      });
+
+      return;
+    }
     try {
       await login(formData);
       setToast({
@@ -21,11 +37,8 @@ const Login = ({
         message: "Logged in successfully!",
       });
       navigate("/dashboard");
-    } catch (error) {
-      setToast({
-        type: "error",
-        message: error instanceof Error ? error.message : "Failed to log in.",
-      });
+    } catch {
+      setErrors({ general: "Invalid email or password" });
     }
   };
 
@@ -44,6 +57,8 @@ const Login = ({
           handleLogin={handleLogin}
           formData={formData}
           setFormData={setFormData}
+          setErrors={setErrors}
+          errors={errors}
         />
         <p className="mt-6 text-sm text-gray-500">
           Don't have an account?{" "}

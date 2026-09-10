@@ -9,9 +9,12 @@ const LoginForm = ({
   handleLogin,
   formData,
   setFormData,
+  setErrors,
+  errors,
 }: LoginAuthFormType) => {
   return (
     <form
+      noValidate
       onSubmit={handleLogin}
       className="w-full max-w-md space-y-5 rounded-2xl border border-sage-light/60 bg-white p-6 shadow-lg sm:p-8"
     >
@@ -21,6 +24,9 @@ const LoginForm = ({
           Log in to continue tracking your applications.
         </p>
       </div>
+      {errors.general && (
+        <p className="text-sm text-red-600">{errors.general}</p>
+      )}
       {/* Email */}
       <div className="space-y-2">
         <label
@@ -41,11 +47,18 @@ const LoginForm = ({
             value={formData.email}
             onChange={(e) => {
               setFormData({ ...formData, email: e.target.value });
+              setErrors({
+                ...errors,
+                email: "",
+              });
             }}
-            required
-            className="w-full rounded-xl border border-sage-light bg-sage-light/10 py-3 pl-11 pr-4 text-sm text-deep-forest outline-none transition placeholder:text-gray-400 focus:border-green focus:bg-white focus:ring-2 focus:ring-green/20"
+            // required
+            className={`w-full rounded-xl border bg-sage-light/10 py-3 pl-11 pr-4 text-sm text-deep-forest outline-none transition placeholder:text-gray-400 focus:bg-white focus:ring-2 focus:ring-green/20 ${errors.email ? "border-red-500 focus:border-red-500" : "border-sage-light focus:border-green"}`}
           />
         </div>
+        {errors.email && (
+          <p className="mt-1 text-xs text-red-600">{errors.email}</p>
+        )}
       </div>
       {/* Password */}
       <div className="space-y-2">
@@ -67,11 +80,18 @@ const LoginForm = ({
             value={formData.password}
             onChange={(e) => {
               setFormData({ ...formData, password: e.target.value });
+              setErrors({
+                ...errors,
+                email: "",
+              });
             }}
-            required
-            className="w-full rounded-xl border border-sage-light bg-sage-light/10 py-3 pl-11 pr-4 text-sm text-deep-forest outline-none transition placeholder:text-gray-400 focus:border-green focus:bg-white focus:ring-2 focus:ring-green/20"
+            // required
+            className={`w-full rounded-xl border bg-sage-light/10 py-3 pl-11 pr-4 text-sm text-deep-forest outline-none transition placeholder:text-gray-400 focus:bg-white focus:ring-2 focus:ring-green/20 ${errors.password ? "border-red-500 focus:border-red-500" : "border-sage-light focus:border-green"}`}
           />
         </div>
+        {errors.password && (
+          <p className="mt-1 text-xs text-red-600">{errors.password}</p>
+        )}
       </div>
       {/* Submit */}
       <button
