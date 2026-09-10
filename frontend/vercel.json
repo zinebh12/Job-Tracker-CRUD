@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://hunter-backend-api.vercel.app/:path*"
+      "destination": "https://hunter-backend-api.vercel.app/api/:path*"
     }
   ]
 }
