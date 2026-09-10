@@ -16,8 +16,6 @@ import type { ToastState } from "@/types/applications";
 import Statistics from "@/components/Statistics";
 import Header from "@/components/Header";
 import EmptyState from "@/components/states/EmptyState";
-import { AnimatePresence, motion } from "motion/react";
-
 const Dashboard = ({
   setToast,
 }: {
