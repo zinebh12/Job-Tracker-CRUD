@@ -5,7 +5,7 @@ import {
   logout as logoutUser,
 } from "./../services/authApi";
 import { AuthContext } from "./authContext";
-const API_BASE_URL = "http://localhost:5000/api/auth/user";
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api/auth/user`;
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
