@@ -1,10 +1,13 @@
 import type {
   NewApplicationFormSubmit,
   ApplicationStatus,
+  ApplicationFormErrors,
 } from "../types/applications";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { applicationSchema } from "@/schema/applicationSchema";
+import { z } from "zod";
 const NewApplicationForm = ({
   onSubmit,
   onCancel,
@@ -18,21 +21,18 @@ const NewApplicationForm = ({
     salary: "",
     notes: "",
   });
-  const [errors, setErrors] = useState({
-    company: "",
-    position: "",
-  });
+  const [errors, setErrors] = useState<ApplicationFormErrors>({});
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newErrors = { company: "", position: "" };
-    if (!formData.company.trim()) {
-      newErrors.company = "Company name is required.";
-    }
-    if (!formData.position.trim()) {
-      newErrors.position = "Position name is required.";
-    }
-    setErrors(newErrors);
-    if (newErrors.company || newErrors.position) {
+    setErrors({});
+    const result = applicationSchema.safeParse(formData);
+    if (!result.success) {
+      const tree = z.treeifyError(result.error);
+
+      setErrors({
+        company: tree.properties?.company?.errors?.[0],
+        position: tree.properties?.position?.errors?.[0],
+      });
       return;
     }
     onSubmit({

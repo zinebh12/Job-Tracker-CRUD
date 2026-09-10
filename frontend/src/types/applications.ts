@@ -18,12 +18,12 @@ export interface Pagination {
 }
 
 export interface Stats {
-    total: number;
-    active: number;
-    applied: number;
-    interview: number;
-    offer: number;
-    rejected: number;
+  total: number;
+  active: number;
+  applied: number;
+  interview: number;
+  offer: number;
+  rejected: number;
 }
 
 export interface ApplicationsResponse {
@@ -62,7 +62,7 @@ export interface NewApplicationFormProps {
 export type OnCancel = () => void;
 
 export interface NewApplicationFormSubmit {
-  onSubmit: (application: NewApplicationFormProps) => Promise<void>;
+  onSubmit: (application: NewApplicationFormProps) => void;
   onCancel: OnCancel;
 }
 
@@ -87,3 +87,8 @@ export type ToastState = {
   type: "success" | "error" | "";
   message: string;
 } | null;
+
+export interface ApplicationFormErrors {
+  company?: string;
+  position?: string;
+}

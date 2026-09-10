@@ -96,7 +96,7 @@ const ApplicationDetails = ({
       <div className="mx-auto w-full max-w-5xl">
         {/* Back button */}
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/dashboard")}
           className="mb-5 flex cursor-pointer items-center gap-2 text-sm font-medium text-forest transition hover:text-deep-forest sm:mb-6"
         >
           <FontAwesomeIcon icon={faArrowLeft} />

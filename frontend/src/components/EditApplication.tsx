@@ -1,10 +1,13 @@
 import type {
   ApplicationStatus,
   EditApplicationProps,
+  ApplicationFormErrors,
 } from "../types/applications";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX, faXmark, faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
+import { updateApplicationSchema } from "@/schema/applicationSchema";
+import { z } from "zod";
 const EditApplication = ({
   application,
   onEdit,
@@ -22,24 +25,22 @@ const EditApplication = ({
     salary: application.salary?.toString() ?? "",
     notes: application.notes ?? "",
   });
-  const [errors, setErrors] = useState({
-    company: "",
-    position: "",
-  });
+  const [errors, setErrors] = useState<ApplicationFormErrors>({});
 
   const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newErrors = { company: "", position: "" };
-    if (!formData.company.trim()) {
-      newErrors.company = "Company name is required.";
-    }
-    if (!formData.position.trim()) {
-      newErrors.position = "Position name is required.";
-    }
-    setErrors(newErrors);
-    if (newErrors.company || newErrors.position) {
+    setErrors({});
+    const result = updateApplicationSchema.safeParse(formData);
+    if (!result.success) {
+      const tree = z.treeifyError(result.error);
+
+      setErrors({
+        company: tree.properties?.company?.errors?.[0],
+        position: tree.properties?.position?.errors?.[0],
+      });
       return;
     }
+
     onEdit({
       id: formData.id,
       company: formData.company,
