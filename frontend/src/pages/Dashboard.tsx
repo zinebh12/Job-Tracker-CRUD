@@ -49,7 +49,7 @@ const Dashboard = ({
     setOpenNewApplicationForm(!openNewApplicationForm);
 
   if (loading && !data) {
-    <LoadingState />;
+    return <LoadingState />;
   }
 
   if (data) {

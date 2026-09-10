@@ -7,6 +7,9 @@ import type { ToastState } from "./types/applications";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ProtectedRoute from "./routes/protectedRoutes";
+import HomeRedirect from "./components/HomeRedirect";
+import { useAuth } from "./hooks/useAuth";
+import LoadingState from "./components/states/LoadingState";
 function App() {
   const [toast, setToast] = useState<ToastState>(null);
   useEffect(() => {
@@ -18,11 +21,15 @@ function App() {
 
     return () => clearTimeout(timer);
   }, [toast]);
+  const { loading: authLoading } = useAuth();
 
+  if (authLoading) {
+    return <LoadingState />;
+  }
   return (
     <>
       <Routes>
-        <Route path="/" element={<Navigate to="/register" replace />} />
+        <Route path="/" element={<HomeRedirect />} />
         <Route path="/register" element={<Register setToast={setToast} />} />
         <Route path="/login" element={<Login setToast={setToast} />} />
         <Route element={<ProtectedRoute />}>
