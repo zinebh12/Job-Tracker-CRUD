@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import ApplicationDetails from "./pages/ApplicationDetails";
 import { useState, useEffect } from "react";
@@ -22,8 +22,9 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/register" element={<Register setToast={setToast}  />} />
-        <Route path="/login" element={<Login setToast={setToast}  />} />
+        <Route path="/" element={<Navigate to="/register" replace />} />
+        <Route path="/register" element={<Register setToast={setToast} />} />
+        <Route path="/login" element={<Login setToast={setToast} />} />
         <Route element={<ProtectedRoute />}>
           <Route
             path="/dashboard"
