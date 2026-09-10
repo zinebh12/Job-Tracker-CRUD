@@ -58,217 +58,219 @@ const EditApplication = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-deep-forest/50 backdrop-blur-sm md:overflow-y-hidden">
-      <form
-        onSubmit={handleEdit}
-        className="w-full  max-w-2xl rounded-3xl bg-white p-6 shadow-2xl sm:p-8"
-      >
-        {/* Header */}
-        <div className="mb-6 flex items-start justify-between">
-          <div>
-            <p className="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-green">
-              Application
-            </p>
+      <div className="flex min-h-full items-start justify-center px-4 py-6 sm:items-center sm:px-6 sm:py-8">
+        <form
+          onSubmit={handleEdit}
+          className="w-full  max-w-2xl rounded-3xl bg-white p-6 shadow-2xl sm:p-8"
+        >
+          {/* Header */}
+          <div className="mb-6 flex items-start justify-between">
+            <div>
+              <p className="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-green">
+                Application
+              </p>
 
-            <h2 className="text-2xl font-bold text-deep-forest">
-              Edit application
-            </h2>
+              <h2 className="text-2xl font-bold text-deep-forest">
+                Edit application
+              </h2>
 
-            <p className="mt-1 text-sm text-forest/70">
-              Update the information for {application.company}.
-            </p>
-          </div>
+              <p className="mt-1 text-sm text-forest/70">
+                Update the information for {application.company}.
+              </p>
+            </div>
 
-          <button
-            type="button"
-            onClick={onCancel}
-            className="cursor-pointer flex w-9 h-9 items-center justify-center rounded-full text-xl text-forest transition hover:bg-sage-light hover:text-deep-forest"
-            aria-label="Close"
-          >
-            <FontAwesomeIcon icon={faX} className="text-sm " />
-          </button>
-        </div>
-
-        {/* Form fields */}
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-deep-forest">
-              Company
-            </label>
-
-            <input
-              value={formData.company}
-              onChange={(e) => {
-                setFormData({
-                  ...formData,
-                  company: e.target.value,
-                });
-
-                setErrors({
-                  ...errors,
-                  company: "",
-                });
-              }}
-              type="text"
-              placeholder="Company Name"
-              className={`${inputClass} ${
-                errors.company ? "border-red-500" : "border-sage"
-              }`}
-            />
-
-            {errors.company && (
-              <p className="mt-1 text-xs text-red-600">{errors.company}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-deep-forest">
-              Position
-            </label>
-
-            <input
-              value={formData.position}
-              onChange={(e) => {
-                setFormData({
-                  ...formData,
-                  position: e.target.value,
-                });
-
-                setErrors({
-                  ...errors,
-                  position: "",
-                });
-              }}
-              type="text"
-              placeholder="Position"
-              className={`${inputClass} ${
-                errors.position ? "border-red-500" : "border-sage"
-              }`}
-            />
-
-            {errors.position && (
-              <p className="mt-1 text-xs text-red-600">{errors.position}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-deep-forest">
-              Location
-            </label>
-
-            <input
-              value={formData.location}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  location: e.target.value,
-                })
-              }
-              type="text"
-              className={inputClass}
-              placeholder="Location"
-            />
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-deep-forest">
-              Status
-            </label>
-
-            <select
-              value={formData.status}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  status: e.target.value as ApplicationStatus,
-                })
-              }
-              className={inputClass}
+            <button
+              type="button"
+              onClick={onCancel}
+              className="cursor-pointer flex w-9 h-9 items-center justify-center rounded-full text-xl text-forest transition hover:bg-sage-light hover:text-deep-forest"
+              aria-label="Close"
             >
-              <option value="Applied">Applied</option>
-              <option value="Interview">Interview</option>
-              <option value="Offer">Offer</option>
-              <option value="Rejected">Rejected</option>
-            </select>
+              <FontAwesomeIcon icon={faX} className="text-sm " />
+            </button>
           </div>
 
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-deep-forest">
-              Date Applied
-            </label>
+          {/* Form fields */}
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-deep-forest">
+                Company
+              </label>
 
-            <input
-              value={formData.date_applied}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  date_applied: e.target.value,
-                })
-              }
-              type="date"
-              className={inputClass}
-            />
+              <input
+                value={formData.company}
+                onChange={(e) => {
+                  setFormData({
+                    ...formData,
+                    company: e.target.value,
+                  });
+
+                  setErrors({
+                    ...errors,
+                    company: "",
+                  });
+                }}
+                type="text"
+                placeholder="Company Name"
+                className={`${inputClass} ${
+                  errors.company ? "border-red-500" : "border-sage"
+                }`}
+              />
+
+              {errors.company && (
+                <p className="mt-1 text-xs text-red-600">{errors.company}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-deep-forest">
+                Position
+              </label>
+
+              <input
+                value={formData.position}
+                onChange={(e) => {
+                  setFormData({
+                    ...formData,
+                    position: e.target.value,
+                  });
+
+                  setErrors({
+                    ...errors,
+                    position: "",
+                  });
+                }}
+                type="text"
+                placeholder="Position"
+                className={`${inputClass} ${
+                  errors.position ? "border-red-500" : "border-sage"
+                }`}
+              />
+
+              {errors.position && (
+                <p className="mt-1 text-xs text-red-600">{errors.position}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-deep-forest">
+                Location
+              </label>
+
+              <input
+                value={formData.location}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    location: e.target.value,
+                  })
+                }
+                type="text"
+                className={inputClass}
+                placeholder="Location"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-deep-forest">
+                Status
+              </label>
+
+              <select
+                value={formData.status}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    status: e.target.value as ApplicationStatus,
+                  })
+                }
+                className={inputClass}
+              >
+                <option value="Applied">Applied</option>
+                <option value="Interview">Interview</option>
+                <option value="Offer">Offer</option>
+                <option value="Rejected">Rejected</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-deep-forest">
+                Date Applied
+              </label>
+
+              <input
+                value={formData.date_applied}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    date_applied: e.target.value,
+                  })
+                }
+                type="date"
+                className={inputClass}
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-deep-forest">
+                Salary
+              </label>
+
+              <input
+                value={formData.salary}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    salary: e.target.value,
+                  })
+                }
+                type="number"
+                className={inputClass}
+                placeholder="Salary"
+              />
+            </div>
+
+            <div className="sm:col-span-2">
+              <label className="mb-2 block text-sm font-semibold text-deep-forest">
+                Notes
+              </label>
+
+              <textarea
+                value={formData.notes}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    notes: e.target.value,
+                  })
+                }
+                rows={4}
+                className={`${inputClass} resize-none h-12`}
+                placeholder="Add notes about this application..."
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-deep-forest">
-              Salary
-            </label>
+          {/* Actions */}
 
-            <input
-              value={formData.salary}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  salary: e.target.value,
-                })
-              }
-              type="number"
-              className={inputClass}
-              placeholder="Salary"
-            />
+          <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-sage/50 px-5 py-3 text-sm font-semibold text-forest transition hover:bg-sage-light"
+            >
+              <FontAwesomeIcon icon={faXmark} />
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              className="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-green px-5 py-3 text-sm font-semibold text-white transition hover:bg-forest"
+            >
+              <FontAwesomeIcon icon={faFloppyDisk} />
+              Save Changes
+            </button>
           </div>
-
-          <div className="sm:col-span-2">
-            <label className="mb-2 block text-sm font-semibold text-deep-forest">
-              Notes
-            </label>
-
-            <textarea
-              value={formData.notes}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  notes: e.target.value,
-                })
-              }
-              rows={4}
-              className={`${inputClass} resize-none h-12`}
-              placeholder="Add notes about this application..."
-            />
-          </div>
-        </div>
-
-        {/* Actions */}
-
-        <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-sage/50 px-5 py-3 text-sm font-semibold text-forest transition hover:bg-sage-light"
-          >
-            <FontAwesomeIcon icon={faXmark} />
-            Cancel
-          </button>
-
-          <button
-            type="submit"
-            className="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-green px-5 py-3 text-sm font-semibold text-white transition hover:bg-forest"
-          >
-            <FontAwesomeIcon icon={faFloppyDisk} />
-            Save Changes
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

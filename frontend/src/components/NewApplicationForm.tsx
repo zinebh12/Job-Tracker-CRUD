@@ -59,7 +59,7 @@ const NewApplicationForm = ({
     "w-full rounded-xl border border-sage/40 bg-white px-4 py-3 text-sm text-deep-forest outline-none transition placeholder:text-forest/40 focus:border-green focus:ring-2 focus:ring-green/20";
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-deep-forest/50 backdrop-blur-sm md:overflow-y-hidden">
-      <div className="flex min-h-full items-start justify-center sm:items-center">
+      <div className="flex min-h-full items-start justify-center px-4 py-6 sm:items-center sm:px-6 sm:py-8">
         <form
           onSubmit={handleSubmit}
           className="w-full max-w-2xl rounded-3xl bg-white p-6 shadow-xl sm:p-8"
