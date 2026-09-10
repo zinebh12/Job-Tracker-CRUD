@@ -56,9 +56,9 @@ const NewApplicationForm = ({
     onCancel();
   };
   const inputClass =
-    "w-full h-full rounded-xl border border-sage/40 bg-white px-4 py-3 text-sm text-deep-forest outline-none transition placeholder:text-forest/40 focus:border-green focus:ring-2 focus:ring-green/20";
+    "w-full rounded-xl border border-sage/40 bg-white px-4 py-3 text-sm text-deep-forest outline-none transition placeholder:text-forest/40 focus:border-green focus:ring-2 focus:ring-green/20";
   return (
-    <div className="fixed inset-0 h-full z-50 flex items-center justify-center bg-deep-forest/50 px-4 py-6 backdrop-blur-sm">
+    <div className="fixed inset-0 h-screen z-50 flex items-center justify-center bg-deep-forest/50 px-4 py-6 backdrop-blur-sm">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-2xl rounded-3xl bg-white p-6 shadow-xl sm:p-8"

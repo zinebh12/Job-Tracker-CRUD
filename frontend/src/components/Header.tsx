@@ -28,7 +28,7 @@ const Header = ({
     }
   };
   return (
-    <div className="flex w-full flex-col gap-4 border-b border-sage bg-white px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5">
+    <div className="flex w-full gap-4 border-b border-sage bg-white px-4 py-4 flex-row items-center justify-between sm:px-6 sm:py-5">
       <h1 className="font-display text-3xl text-deep-forest sm:text-4xl lg:text-5xl">
         Hunter.
       </h1>
