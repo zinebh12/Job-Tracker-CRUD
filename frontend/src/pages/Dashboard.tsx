@@ -55,26 +55,28 @@ const Dashboard = ({
   if (data) {
     return (
       <div className="min-h-screen bg-sage-light font-manrope">
-        {openNewApplicationForm && (
-          <NewApplicationForm
-            onSubmit={async (application) => {
-              try {
-                await handleCreateApplication(application, refetch);
-                setToast({
-                  type: "success",
-                  message: "Application added successfully",
-                });
-              } catch (error) {
-                console.log("Failed to create an application", error);
-                setToast({
-                  type: "error",
-                  message: "Failed to create an application.",
-                });
-              }
-            }}
-            onCancel={handleOpenApplicationForm}
-          />
-        )}
+        <AnimatePresence>
+          {openNewApplicationForm && (
+            <NewApplicationForm
+              onSubmit={async (application) => {
+                try {
+                  await handleCreateApplication(application, refetch);
+                  setToast({
+                    type: "success",
+                    message: "Application added successfully",
+                  });
+                } catch (error) {
+                  console.log("Failed to create an application", error);
+                  setToast({
+                    type: "error",
+                    message: "Failed to create an application.",
+                  });
+                }
+              }}
+              onCancel={handleOpenApplicationForm}
+            />
+          )}
+        </AnimatePresence>
 
         {/* Header */}
         <div className="space-y-4 pb-4">

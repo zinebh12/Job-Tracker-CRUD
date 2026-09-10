@@ -59,7 +59,6 @@ const NewApplicationForm = ({
   const inputClass =
     "w-full rounded-xl border border-sage/40 bg-white px-4 py-3 text-sm text-deep-forest outline-none transition placeholder:text-forest/40 focus:border-green focus:ring-2 focus:ring-green/20";
   return (
-    <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -233,7 +232,6 @@ const NewApplicationForm = ({
           </motion.form>
         </div>
       </motion.div>
-    </AnimatePresence>
   );
 };
 export default NewApplicationForm;
