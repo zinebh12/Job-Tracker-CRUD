@@ -133,15 +133,17 @@ const Dashboard = ({
                 </div>
               </div>
             </motion.div>
-            {confirmDelete && (
-              <ConfirmDeleteState
-                selectedIds={selectedIds}
-                refetch={refetch}
-                setSelectedIds={setSelectedIds}
-                setDelete={setConfirmDelete}
-                setToast={setToast}
-              />
-            )}
+            <AnimatePresence>
+              {confirmDelete && (
+                <ConfirmDeleteState
+                  selectedIds={selectedIds}
+                  refetch={refetch}
+                  setSelectedIds={setSelectedIds}
+                  setDelete={setConfirmDelete}
+                  setToast={setToast}
+                />
+              )}
+            </AnimatePresence>
 
             {data.applications.length === 0 && searchTerm !== "" ? (
               <NoResultState />

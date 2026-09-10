@@ -18,6 +18,7 @@ import EditApplication from "@/components/EditApplication";
 import { handleEditApplication } from "@/handlers/applicationsHandlers";
 import ConfirmDeleteState from "@/components/states/ConfirmDeleteState";
 import type { ToastState } from "../types/applications";
+import { AnimatePresence, motion } from "motion/react";
 
 const ApplicationDetails = ({
   setToast,
@@ -67,248 +68,272 @@ const ApplicationDetails = ({
 
   return (
     <div className="min-h-screen bg-sage-light px-4 py-6 font-manrope sm:px-6 sm:py-8 lg:px-10">
-      {openEditApplication && (
-        <EditApplication
-          application={application}
-          onEdit={async (updatedApplication) => {
-            try {
-              await handleEditApplication(updatedApplication, async () => {
-                const response = await getApplicationDetails(Number(id));
-                setApplication(response);
-              });
-              setOpenEditApplication(false);
-              setToast({
-                type: "success",
-                message: "Application updated successfully",
-              });
-            } catch (error) {
-              console.error("Failed to update application:", error);
-              setToast({
-                type: "error",
-                message: "Failed to update application",
-              });
-            }
-          }}
-          onCancel={() => setOpenEditApplication(false)}
-        />
-      )}
-
+      <AnimatePresence>
+        {openEditApplication && (
+          <EditApplication
+            application={application}
+            onEdit={async (updatedApplication) => {
+              try {
+                await handleEditApplication(updatedApplication, async () => {
+                  const response = await getApplicationDetails(Number(id));
+                  setApplication(response);
+                });
+                setOpenEditApplication(false);
+                setToast({
+                  type: "success",
+                  message: "Application updated successfully",
+                });
+              } catch (error) {
+                console.error("Failed to update application:", error);
+                setToast({
+                  type: "error",
+                  message: "Failed to update application",
+                });
+              }
+            }}
+            onCancel={() => setOpenEditApplication(false)}
+          />
+        )}
+      </AnimatePresence>
       <div className="mx-auto w-full max-w-5xl">
         {/* Back button */}
-        <button
+        <motion.button
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
           onClick={() => navigate("/dashboard")}
           className="mb-5 flex cursor-pointer items-center gap-2 text-sm font-medium text-forest transition hover:text-deep-forest sm:mb-6"
         >
           <FontAwesomeIcon icon={faArrowLeft} />
           <span>Back to applications</span>
-        </button>
-
+        </motion.button>
         {/* Main card */}
-        <div className="overflow-hidden rounded-2xl bg-white shadow-sm sm:rounded-3xl">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="overflow-hidden rounded-2xl bg-white shadow-sm sm:rounded-3xl"
+        >
           {/* Header */}
-          <div className="border-b border-sage-light px-5 py-6 sm:px-8 sm:py-8">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, delay: 0.05 }}
+            className="border-b border-sage-light px-5 py-6 sm:px-8 sm:py-8"
+          >
             <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
               <div className="min-w-0">
-                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-green">
+                <motion.p
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25, delay: 0.1 }}
+                  className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-green"
+                >
                   Application
-                </p>
-
+                </motion.p>
                 {/* Title + actions */}
                 <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:gap-4">
-                  <h1 className="capitalize wrap-break-word font-display text-3xl text-deep-forest sm:text-4xl lg:text-5xl">
+                  <motion.h1
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.35, delay: 0.12 }}
+                    className="capitalize wrap-break-word font-display text-3xl text-deep-forest sm:text-4xl lg:text-5xl"
+                  >
                     {application.position}
-                  </h1>
-
+                  </motion.h1>
                   <div className="flex flex-wrap items-center gap-3">
-                    <button
+                    <motion.button
+                      whileHover={{ y: -1 }}
+                      whileTap={{ scale: 0.97 }}
                       onClick={() =>
                         setOpenEditApplication(!openEditApplication)
                       }
-                      className="flex cursor-pointer  items-center justify-center rounded-lg font-display text-xs italic text-forest transition hover:underline"
+                      className="flex cursor-pointer items-center justify-center rounded-lg font-display text-xs italic text-forest transition hover:underline"
                       aria-label="Edit application"
                     >
                       Edit Application.
-                    </button>
-
-                    <button
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ y: -1 }}
+                      whileTap={{ scale: 0.97 }}
                       onClick={() => setConfirmDelete(!confirmDelete)}
                       className="flex cursor-pointer items-center justify-center rounded-lg font-display text-xs italic text-red-600 transition hover:text-red-700 hover:underline"
                       aria-label="Delete application"
                     >
                       Delete Application.
-                    </button>
+                    </motion.button>
                   </div>
                 </div>
-                {confirmDelete && (
-                  <ConfirmDeleteState
-                    id={application.id}
-                    setDelete={setConfirmDelete}
-                    setToast={setToast}
-                  />
-                )}
-
-                <div className="mt-3 flex min-w-0 items-center gap-2 text-forest">
+                <AnimatePresence>
+                  {confirmDelete && (
+                    <ConfirmDeleteState
+                      id={application.id}
+                      setDelete={setConfirmDelete}
+                      setToast={setToast}
+                    />
+                  )}
+                </AnimatePresence>
+                <motion.div
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.18 }}
+                  className="mt-3 flex min-w-0 items-center gap-2 text-forest"
+                >
                   <FontAwesomeIcon
                     icon={faBuildingColumns}
                     className="shrink-0"
                   />
-
                   <span className="truncate text-base font-medium sm:text-lg">
                     {application.company}
                   </span>
-                </div>
+                </motion.div>
               </div>
-
-              <span
-                className={`w-fit shrink-0 rounded-full  px-4 py-2 text-sm font-semibold ${
-                  application.status === "Applied"
-                    ? "bg-sage-light text-forest"
-                    : application.status === "Interview"
-                      ? "bg-amber-100 text-amber-800"
-                      : application.status === "Offer"
-                        ? "bg-green-100 text-green"
-                        : "bg-red-100 text-red-700"
-                }`}
+              <motion.span
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+                className={`w-fit shrink-0 rounded-full px-4 py-2 text-sm font-semibold ${application.status === "Applied" ? "bg-sage-light text-forest" : application.status === "Interview" ? "bg-amber-100 text-amber-800" : application.status === "Offer" ? "bg-green-100 text-green" : "bg-red-100 text-red-700"}`}
               >
                 {application.status}
-              </span>
+              </motion.span>
             </div>
-          </div>
-
+          </motion.div>
           {/* Information */}
           <div className="grid grid-cols-1 gap-4 px-5 py-6 sm:grid-cols-2 sm:gap-5 sm:px-8 sm:py-8 lg:grid-cols-4">
-            <div className="rounded-2xl bg-sage-light/50 p-4 sm:p-5">
-              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-sage-light text-forest">
-                <FontAwesomeIcon icon={faLocationDot} />
-              </div>
-
-              <p className="text-xs font-semibold uppercase tracking-wide text-forest/50">
-                Location
-              </p>
-
-              <p className="mt-1 wrao-break text-sm font-semibold text-deep-forest">
-                {application.location || "Not specified"}
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-sage-light/50 p-4 sm:p-5">
-              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-sage-light text-forest">
-                <FontAwesomeIcon icon={faCalendarDays} />
-              </div>
-
-              <p className="text-xs font-semibold uppercase tracking-wide text-forest/50">
-                Date Applied
-              </p>
-
-              <p className="mt-1 text-sm font-semibold text-deep-forest">
-                {application.date_applied
+            {[
+              {
+                icon: faLocationDot,
+                title: "Location",
+                value: application.location || "Not specified",
+              },
+              {
+                icon: faCalendarDays,
+                title: "Date Applied",
+                value: application.date_applied
                   ? application.date_applied.split("T")[0]
-                  : "Not specified"}
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-sage-light/50 p-4 sm:p-5">
-              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-sage-light text-forest">
-                <FontAwesomeIcon icon={faMoneyBillWave} />
-              </div>
-
-              <p className="text-xs font-semibold uppercase tracking-wide text-forest/50">
-                Salary
-              </p>
-
-              <p className="mt-1 text-sm font-semibold text-deep-forest">
-                {application.salary ?? "Not specified"}
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-sage-light/50 p-4 sm:p-5">
-              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-sage-light text-forest">
-                <FontAwesomeIcon icon={faBriefcase} />
-              </div>
-
-              <p className="text-xs font-semibold uppercase tracking-wide text-forest/50">
-                Status
-              </p>
-
-              <p className="mt-1 text-sm font-semibold text-deep-forest">
-                {application.status}
-              </p>
-            </div>
+                  : "Not specified",
+              },
+              {
+                icon: faMoneyBillWave,
+                title: "Salary",
+                value: application.salary ?? "Not specified",
+              },
+              { icon: faBriefcase, title: "Status", value: application.status },
+            ].map((item, index) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.3,
+                  delay: 0.1 + index * 0.06,
+                  ease: "easeOut",
+                }}
+                className="rounded-2xl bg-sage-light/50 p-4 sm:p-5"
+              >
+                <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-sage-light text-forest">
+                  <FontAwesomeIcon icon={item.icon} />
+                </div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-forest/50">
+                  {item.title}
+                </p>
+                <p className="mt-1 text-sm font-semibold text-deep-forest">
+                  {item.value}
+                </p>
+              </motion.div>
+            ))}
           </div>
-
           {/* Notes + Progress */}
-          <div className="flex flex-col gap-8 border-t border-sage-light px-5 py-6 sm:px-8 sm:py-8 lg:flex-row lg:items-start lg:gap-10">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, delay: 0.35 }}
+            className="flex flex-col gap-8 border-t border-sage-light px-5 py-6 sm:px-8 sm:py-8 lg:flex-row lg:items-start lg:gap-10"
+          >
             {/* Notes */}
             <div className="w-full min-w-0 lg:flex-1">
-              <div className="mb-4 flex items-center gap-3">
+              <motion.div
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.4 }}
+                className="mb-4 flex items-center gap-3"
+              >
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-sage-light text-forest">
                   <FontAwesomeIcon icon={faFileLines} />
                 </div>
-
                 <div className="min-w-0">
                   <h2 className="text-base font-semibold text-deep-forest">
                     Notes
                   </h2>
-
                   <p className="text-xs text-forest/50">
                     Additional information about this application
                   </p>
                 </div>
-              </div>
-
-              <div className="rounded-2xl bg-sage-light/30 p-4 sm:p-5">
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, delay: 0.45 }}
+                className="rounded-2xl bg-sage-light/30 p-4 sm:p-5"
+              >
                 <p className="whitespace-pre-wrap wrap-break-words text-sm leading-7 text-forest">
                   {application.notes || "No notes added."}
                 </p>
-              </div>
+              </motion.div>
             </div>
-
             {/* Progress */}
             <div className="w-full min-w-0 lg:flex-1">
-              <div className="mb-6">
+              <motion.div
+                initial={{ opacity: 0, x: 8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.4 }}
+                className="mb-6"
+              >
                 <h2 className="text-base font-semibold text-deep-forest">
                   Application progress
                 </h2>
-
                 <p className="mt-1 text-sm text-forest/60">
                   Track the current stage of your application.
                 </p>
-              </div>
-
+              </motion.div>
               {/* Horizontal on sm+, stacked on mobile */}
               <div className="flex gap-6 sm:flex-row sm:items-start sm:gap-0">
                 {stages.map((stage, index) => {
                   const isCompleted =
                     application.status !== "Rejected" && currentStage >= index;
-
                   const isCurrent =
                     application.status !== "Rejected" && currentStage === index;
-
                   return (
-                    <div
+                    <motion.div
                       key={stage}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{
+                        duration: 0.25,
+                        delay: 0.45 + index * 0.07,
+                        ease: "easeOut",
+                      }}
                       className="flex min-w-0 flex-1 items-start sm:items-center"
                     >
                       {/* Stage */}
                       <div className="flex shrink-0 flex-col items-center text-center">
-                        <div
-                          className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all ${
-                            isCompleted
-                              ? "border-green bg-green text-white"
-                              : "border-sage bg-sage-light text-forest/40"
-                          }`}
+                        <motion.div
+                          initial={{ scale: 0.7 }}
+                          animate={{ scale: 1 }}
+                          transition={{
+                            duration: 0.3,
+                            delay: 0.5 + index * 0.07,
+                            ease: "backOut",
+                          }}
+                          className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all ${isCompleted ? "border-green bg-green text-white" : "border-sage bg-sage-light text-forest/40"}`}
                         >
                           {isCompleted ? "✓" : index + 1}
-                        </div>
-
+                        </motion.div>
                         <p
-                          className={`mt-2 text-xs font-semibold sm:text-sm ${
-                            isCurrent ? "text-green" : "text-deep-forest"
-                          }`}
+                          className={`mt-2 text-xs font-semibold sm:text-sm ${isCurrent ? "text-green" : "text-deep-forest"}`}
                         >
                           {stage}
                         </p>
-
                         <p className="mt-1 text-[11px] text-forest/50 sm:text-xs">
                           {isCompleted
                             ? "Completed"
@@ -317,29 +342,40 @@ const ApplicationDetails = ({
                               : "Upcoming"}
                         </p>
                       </div>
-
                       {/* Connector */}
                       {index < stages.length - 1 && (
-                        <div
-                          className={`hidden h-0.5 flex-1 sm:mx-2 sm:block ${
-                            currentStage > index ? "bg-green" : "bg-sage-light"
-                          }`}
+                        <motion.div
+                          initial={{ scaleX: 0, originX: 0 }}
+                          animate={{ scaleX: 1 }}
+                          transition={{
+                            duration: 0.35,
+                            delay: 0.55 + index * 0.07,
+                            ease: "easeOut",
+                          }}
+                          className={`hidden h-0.5 flex-1 sm:mx-2 sm:block ${currentStage > index ? "bg-green" : "bg-sage-light"}`}
                         />
                       )}
-                    </div>
+                    </motion.div>
                   );
                 })}
               </div>
-
               {/* Rejected state */}
-              {application.status === "Rejected" && (
-                <div className="mt-6 flex items-center gap-3 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
-                  <span className="font-semibold">Application rejected</span>
-                </div>
-              )}
+              <AnimatePresence>
+                {application.status === "Rejected" && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, height: 0 }}
+                    animate={{ opacity: 1, y: 0, height: "auto" }}
+                    exit={{ opacity: 0, y: 8, height: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="mt-6 flex items-center gap-3 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600"
+                  >
+                    <span className="font-semibold">Application rejected</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );
