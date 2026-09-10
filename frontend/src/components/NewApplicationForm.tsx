@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { applicationSchema } from "@/schema/applicationSchema";
 import { z } from "zod";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 const NewApplicationForm = ({
   onSubmit,
   onCancel,
