@@ -16,6 +16,7 @@ import type { ToastState } from "@/types/applications";
 import Statistics from "@/components/Statistics";
 import Header from "@/components/Header";
 import EmptyState from "@/components/states/EmptyState";
+import { AnimatePresence, motion } from "motion/react";
 const Dashboard = ({
   setToast,
 }: {
@@ -86,7 +87,12 @@ const Dashboard = ({
               selectedStatus={statusFilter}
             />
 
-            <div className="rounded-2xl bg-white p-4 shadow-sm sm:p-5">
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+              className="rounded-2xl bg-white p-4 shadow-sm sm:p-5"
+            >
               <div className="flex flex-col gap-4">
                 <Search onSearch={handleSearch} />
                 <div className="flex flex-col gap-3 border-t border-sage-light pt-4 sm:flex-row sm:items-center sm:justify-between">
@@ -95,24 +101,36 @@ const Dashboard = ({
                     <span className="font-semibold text-forest">
                       {data.applications.length}
                     </span>{" "}
-                    of{" "}
+                    of
                     <span className="font-semibold text-forest">
                       {data.pagination.total}
                     </span>{" "}
                     applications
                   </span>
-                  {selectedIds.length > 0 && (
-                    <button
-                      onClick={() => setConfirmDelete(!confirmDelete)}
-                      className="flex w-fit cursor-pointer items-center gap-2 text-xs font-semibold text-red-600 underline decoration-red-300 underline-offset-4 transition hover:text-red-700 hover:decoration-red-600 sm:text-sm"
-                    >
-                      <FontAwesomeIcon icon={faTrash} className="text-[11px]" />
-                      <span> Delete selected ({selectedIds.length}) </span>
-                    </button>
-                  )}
+                  <AnimatePresence>
+                    {selectedIds.length > 0 && (
+                      <motion.button
+                        initial={{ opacity: 0, scale: 0.9, x: 8 }}
+                        animate={{ opacity: 1, scale: 1, x: 0 }}
+                        exit={{ opacity: 0, scale: 0.9, x: 8 }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        type="button"
+                        onClick={() => setConfirmDelete(!confirmDelete)}
+                        whileHover={{ y: -1 }}
+                        whileTap={{ scale: 0.96 }}
+                        className="flex w-fit cursor-pointer items-center gap-2 text-xs font-semibold text-red-600 underline decoration-red-300 underline-offset-4 transition hover:text-red-700 hover:decoration-red-600 sm:text-sm"
+                      >
+                        <FontAwesomeIcon
+                          icon={faTrash}
+                          className="text-[11px]"
+                        />
+                        <span>Delete selected ({selectedIds.length})</span>
+                      </motion.button>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
-            </div>
+            </motion.div>
             {confirmDelete && (
               <ConfirmDeleteState
                 selectedIds={selectedIds}
@@ -128,7 +146,12 @@ const Dashboard = ({
             ) : (
               <>
                 {/* Table */}
-                <div className="w-full overflow-x-auto rounded-md bg-white">
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  className="w-full overflow-x-auto rounded-md bg-white"
+                >
                   <table className="w-full table-fixed text-left">
                     <thead>
                       <tr className="border-b border-sage-light">
@@ -180,10 +203,7 @@ const Dashboard = ({
                           Salary
                         </th>
                         {/* Actions */}
-                        {/* <th className="px-2 py-3 text-xs font-semibold uppercase text-forest sm:px-3 sm:py-4 lg:px-4">
-
-                        Actions
-                      </th> */}
+                        {/* <th className="px-2 py-3 text-xs font-semibold uppercase text-forest sm:px-3 sm:py-4 lg:px-4"> Actions </th> */}
                       </tr>
                     </thead>
                     <tbody>
@@ -198,7 +218,7 @@ const Dashboard = ({
                       ))}
                     </tbody>
                   </table>
-                </div>
+                </motion.div>
                 {data.applications.length === 0 && <EmptyState />}
                 {/* Pagination */}
                 <Pagination
