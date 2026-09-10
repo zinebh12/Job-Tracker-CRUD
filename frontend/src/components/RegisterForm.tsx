@@ -1,9 +1,12 @@
+import { useState } from "react";
 import type { RegisterAuthFormType } from "@/types/auth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEnvelope,
   faLock,
   faUserPlus,
+  faEye,
+  faEyeSlash,
 } from "@fortawesome/free-solid-svg-icons";
 const RegisterForm = ({
   handleFormSubmit,
@@ -12,6 +15,7 @@ const RegisterForm = ({
   setErrors,
   errors,
 }: RegisterAuthFormType) => {
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <form
       noValidate
@@ -74,24 +78,26 @@ const RegisterForm = ({
           />
           <input
             id="password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="••••••••"
             value={formData.password}
             onChange={(e) => {
               setFormData({ ...formData, password: e.target.value });
-              setErrors({
-                ...errors,
-                password: "",
-              });
+              setErrors({ ...errors, password: "", general: "" });
             }}
-            className={`w-full rounded-xl border bg-sage-light/10 py-3 pl-11 pr-4 text-sm text-deep-forest outline-none transition placeholder:text-gray-400 focus:bg-white focus:ring-2 focus:ring-green/20 ${errors.password ? "border-red-500 focus:border-red-500" : "border-sage-light focus:border-green"}`}
+            className={`w-full rounded-xl border bg-sage-light/10 py-3 pl-11 pr-12 text-sm text-deep-forest outline-none transition placeholder:text-gray-400 focus:bg-white focus:ring-2 focus:ring-green/20 ${errors.password ? "border-red-500 focus:border-red-500" : "border-sage-light focus:border-green"}`}
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 transition hover:text-deep-forest"
+          >
+            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+          </button>
         </div>
-        <p className="text-xs text-gray-400">
-          Password must be at least 8 characters.
-        </p>
         {errors.password && (
-          <p className="mt-1 text-xs text-red-600">{errors.password}</p>
+          <p className="mt-1 text-xs text-red-600"> {errors.password} </p>
         )}
       </div>
       {/* Submit */}
