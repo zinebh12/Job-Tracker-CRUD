@@ -57,7 +57,7 @@ const EditApplication = ({
     "w-full rounded-xl border border-sage/40 bg-white px-4 py-3 text-sm text-deep-forest outline-none transition focus:border-green focus:ring-2 focus:ring-green/20";
 
   return (
-    <div className="fixed inset-0 h-full z-50 flex items-center justify-center bg-deep-forest/50 px-4 py-6 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-deep-forest/50 backdrop-blur-sm md:overflow-y-hidden">
       <form
         onSubmit={handleEdit}
         className="w-full  max-w-2xl rounded-3xl bg-white p-6 shadow-2xl sm:p-8"
