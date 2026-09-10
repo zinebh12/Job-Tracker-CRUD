@@ -44,7 +44,7 @@ const Header = ({
         <button
           type="button"
           onClick={handleLogout}
-          className="flex shrink-0 cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 hover:text-red-700 active:scale-95 sm:px-4 sm:py-2.5"
+          className="flex w-fit shrink-0 cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 hover:text-red-700 active:scale-95 sm:px-4 sm:py-2.5"
         >
           <FontAwesomeIcon
             icon={faRightFromBracket}
