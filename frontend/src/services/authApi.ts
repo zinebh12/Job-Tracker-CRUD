@@ -1,5 +1,5 @@
 import type { RegisterData, LoginData } from "@/types/auth";
-const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api/auth`;
+const API_BASE_URL = `/api/auth`;
 
 export const register = async (user: RegisterData) => {
   const response = await fetch(`${API_BASE_URL}/register`, {
