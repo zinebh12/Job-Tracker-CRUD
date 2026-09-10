@@ -19,7 +19,6 @@ Hunter is a full-stack web app for tracking job applications: add, edit, filter,
 ## Tech Stack
 
 **Frontend**
-
 - React 19 + TypeScript, built with Vite
 - React Router (client-side routing incl. protected routes)
 - Tailwind CSS 4
@@ -28,7 +27,6 @@ Hunter is a full-stack web app for tracking job applications: add, edit, filter,
 - Font Awesome / Lucide icons, Motion (animations)
 
 **Backend**
-
 - Node.js + Express 5, written in TypeScript
 - PostgreSQL via `pg` (raw SQL queries, parameterized)
 - JWT authentication (`jsonwebtoken`) stored in HTTP-only cookies
@@ -37,7 +35,6 @@ Hunter is a full-stack web app for tracking job applications: add, edit, filter,
 - `cors` + `cookie-parser` for cross-origin cookie-based auth
 
 **Deployment**
-
 - Both frontend and backend are deployed on Vercel as separate projects; the frontend proxies `/api/*` requests to the backend via `vercel.json` rewrites.
 
 ## Project Structure
@@ -70,23 +67,22 @@ Hunter/
 
 All `/api/applications/*` routes require authentication (JWT cookie).
 
-| Method | Endpoint                | Description                                                                          |
-| ------ | ----------------------- | ------------------------------------------------------------------------------------ |
-| POST   | `/api/auth/register`    | Create a new user account                                                            |
-| POST   | `/api/auth/login`       | Log in, sets an HTTP-only JWT cookie                                                 |
-| POST   | `/api/auth/logout`      | Clear the session cookie                                                             |
-| GET    | `/api/auth/user`        | Get the current authenticated user                                                   |
-| GET    | `/api/applications`     | List applications (supports `page`, `limit`, `search`, `status`, `location`) + stats |
-| GET    | `/api/applications/:id` | Get a single application                                                             |
-| POST   | `/api/applications`     | Create a new application                                                             |
-| PATCH  | `/api/applications/:id` | Update an application                                                                |
-| DELETE | `/api/applications/:id` | Delete a single application                                                          |
-| DELETE | `/api/applications`     | Bulk delete applications (`{ ids: number[] }`)                                       |
+| Method | Endpoint                  | Description                              |
+|--------|----------------------------|-------------------------------------------|
+| POST   | `/api/auth/register`       | Create a new user account                |
+| POST   | `/api/auth/login`          | Log in, sets an HTTP-only JWT cookie     |
+| POST   | `/api/auth/logout`         | Clear the session cookie                 |
+| GET    | `/api/auth/user`           | Get the current authenticated user       |
+| GET    | `/api/applications`        | List applications (supports `page`, `limit`, `search`, `status`, `location`) + stats |
+| GET    | `/api/applications/:id`    | Get a single application                 |
+| POST   | `/api/applications`        | Create a new application                 |
+| PATCH  | `/api/applications/:id`    | Update an application                    |
+| DELETE | `/api/applications/:id`    | Delete a single application              |
+| DELETE | `/api/applications`        | Bulk delete applications (`{ ids: number[] }`) |
 
 ## Getting Started
 
 ### Prerequisites
-
 - Node.js
 - A PostgreSQL database (e.g. local Postgres, Supabase, Neon, or Railway)
 
