@@ -36,7 +36,7 @@ const Header = ({
         <button
           type="button"
           onClick={onOpen}
-          className="flex min-w-0 cursor-pointer items-center justify-center gap-2 rounded-lg bg-forest px-3 py-2 text-sm text-white transition hover:bg-deep-forest active:scale-95 sm:flex-none sm:px-4 sm:py-2.5"
+          className="flex min-w-0 cursor-pointer items-center justify-center gap-2 rounded-lg bg-forest px-3 py-3 text-sm text-white transition hover:bg-deep-forest active:scale-95 sm:flex-none sm:px-4 sm:py-2.5"
         >
           <FontAwesomeIcon icon={faPlus} className="text-xs sm:text-sm" />
           <span className="hidden sm:inline"> New Application </span>
