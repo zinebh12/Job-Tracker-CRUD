@@ -32,7 +32,7 @@ const Header = ({
       <h1 className="font-display text-3xl text-deep-forest sm:text-4xl lg:text-5xl">
         Hunter.
       </h1>
-      <div className="flex w-full items-center gap-2 sm:w-auto">
+      <div className="flex items-center gap-2 sm:w-auto">
         <button
           type="button"
           onClick={onOpen}
