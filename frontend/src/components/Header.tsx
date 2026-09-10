@@ -40,7 +40,6 @@ const Header = ({
         >
           <FontAwesomeIcon icon={faPlus} className="text-xs sm:text-sm" />
           <span className="hidden sm:inline"> New Application </span>
-          <span className="sm:hidden"> New </span>
         </button>
         <button
           type="button"
@@ -51,7 +50,7 @@ const Header = ({
             icon={faRightFromBracket}
             className="text-xs sm:text-sm"
           />
-          <span>Logout</span>
+          <span className="hidden sm:inline">Logout</span>
         </button>
       </div>
     </div>
