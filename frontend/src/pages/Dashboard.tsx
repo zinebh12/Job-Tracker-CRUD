@@ -1,22 +1,35 @@
 import { useState } from "react";
-import DisplayCard from "../components/DisplayCard";
-import Pagination from "../components/Pagination";
-import Search from "../components/Search";
-import StatusFilter from "../components/StatusFilter";
-import NewApplicationForm from "../components/NewApplicationForm";
-import { useApplications } from "../hooks/useApplications";
+
+// External libraries
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { AnimatePresence, motion } from "motion/react";
+
+// Components
+import Header from "@/components/Header";
+import Statistics from "@/components/Statistics";
+import DisplayCard from "@/components/DisplayCard";
+import Pagination from "@/components/Pagination";
+import Search from "@/components/Search";
+import StatusFilter from "@/components/StatusFilter";
+import NewApplicationForm from "@/components/NewApplicationForm";
 import Checkbox from "@/components/smoothui/checkbox";
-import { handleCreateApplication } from "./../handlers/applicationsHandlers";
+
+// States
 import LoadingState from "@/components/states/LoadingState";
+import EmptyState from "@/components/states/EmptyState";
 import { NoResultState } from "@/components/states/NoResultState";
 import ConfirmDeleteState from "@/components/states/ConfirmDeleteState";
+
+// Hooks
+import { useApplications } from "@/hooks/useApplications";
+
+// Handlers
+import { handleCreateApplication } from "@/handlers/applicationsHandlers";
+
+// Types
 import type { ToastState } from "@/types/applications";
-import Statistics from "@/components/Statistics";
-import Header from "@/components/Header";
-import EmptyState from "@/components/states/EmptyState";
-import { AnimatePresence, motion } from "motion/react";
+
 const Dashboard = ({
   setToast,
 }: {

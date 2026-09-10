@@ -1,7 +1,7 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { getApplicationDetails } from "../services/applicationApi";
+// React
 import { useEffect, useState } from "react";
-import type { Application } from "../types/applications";
+
+// External libraries
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
@@ -13,12 +13,25 @@ import {
   faBriefcase,
   // faPen,
 } from "@fortawesome/free-solid-svg-icons";
-import type { ApplicationStatus } from "../types/applications";
-import EditApplication from "@/components/EditApplication";
-import { handleEditApplication } from "@/handlers/applicationsHandlers";
-import ConfirmDeleteState from "@/components/states/ConfirmDeleteState";
-import type { ToastState } from "../types/applications";
+import { useNavigate, useParams } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
+
+// Components
+import EditApplication from "@/components/EditApplication";
+import ConfirmDeleteState from "@/components/states/ConfirmDeleteState";
+
+// Handlers
+import { handleEditApplication } from "@/handlers/applicationsHandlers";
+
+// Services
+import { getApplicationDetails } from "@/services/applicationApi";
+
+// Types
+import type {
+  Application,
+  ApplicationStatus,
+  ToastState,
+} from "@/types/applications";
 
 const ApplicationDetails = ({
   setToast,

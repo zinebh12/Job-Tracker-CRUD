@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTrash,
@@ -8,9 +10,10 @@ import {
   handleDeleteMultipleApplications,
   handleDeleteApplication,
 } from "@/handlers/applicationsHandlers";
-import { useNavigate } from "react-router-dom";
-import type { ToastState } from "@/types/applications";
+
 import { motion } from "motion/react";
+
+import type { ToastState } from "@/types/applications";
 const ConfirmDeleteState = ({
   setDelete,
   selectedIds = [],
