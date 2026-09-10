@@ -13,7 +13,7 @@ export const register = async (req: Request, res: Response) => {
         details: validatedData.error.issues,
       });
     }
-    const { name, email, password } = validatedData.data;
+    const { email, password } = validatedData.data;
 
     const existingUser = await pool.query(
       "SELECT id FROM users WHERE email = $1",
@@ -27,8 +27,8 @@ export const register = async (req: Request, res: Response) => {
 
     const passwordHash = await bcrypt.hash(password, 12);
     const result = await pool.query(
-      "INSERT INTO users(name, email, password_hash) VALUES ($1, $2, $3) RETURNING id, name, email, created_at",
-      [name, email, passwordHash],
+      "INSERT INTO users(email, password_hash) VALUES ($1, $2) RETURNING id, email, created_at",
+      [email, passwordHash],
     );
     return res.status(201).json({
       message: "User registered successfully",
@@ -54,7 +54,7 @@ export const login = async (req: Request, res: Response) => {
     }
     const { email, password } = validatedData.data;
     const result = await pool.query(
-      "SELECT id, name, email, password_hash FROM users WHERE email = $1",
+      "SELECT id, email, password_hash FROM users WHERE email = $1",
       [email],
     );
 
@@ -110,7 +110,7 @@ export const getCurrentUser = async (req: authRequest, res: Response) => {
     }
 
     const result = await pool.query(
-      `SELECT id, name, email FROM users WHERE id = $1`,
+      `SELECT id, email FROM users WHERE id = $1`,
       [req.userId],
     );
     if (result.rows.length === 0) {

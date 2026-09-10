@@ -26,7 +26,6 @@ const Register = ({
       const tree = z.treeifyError(result.error);
 
       setErrors({
-        name: tree.properties?.name?.errors?.[0],
         email: tree.properties?.email?.errors?.[0],
         password: tree.properties?.password?.errors?.[0],
       });

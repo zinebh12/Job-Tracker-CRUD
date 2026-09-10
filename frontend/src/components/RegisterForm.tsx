@@ -1,7 +1,6 @@
 import type { RegisterAuthFormType } from "@/types/auth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faUser,
   faEnvelope,
   faLock,
   faUserPlus,
@@ -26,39 +25,6 @@ const RegisterForm = ({
         <p className="mt-1 text-sm text-gray-500">
           Start tracking your job applications.
         </p>
-      </div>
-      {/* Name */}
-      <div className="space-y-2">
-        <label
-          htmlFor="name"
-          className="text-sm font-semibold text-deep-forest"
-        >
-          Name
-        </label>
-        <div className="relative">
-          <FontAwesomeIcon
-            icon={faUser}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-          />
-          <input
-            id="name"
-            type="text"
-            placeholder="Your name"
-            value={formData.name}
-            onChange={(e) => {
-              setFormData({ ...formData, name: e.target.value });
-              setErrors({
-                ...errors,
-                name: "",
-              });
-            }}
-            // required
-            className={`w-full rounded-xl border bg-sage-light/10 py-3 pl-11 pr-4 text-sm text-deep-forest outline-none transition placeholder:text-gray-400 focus:bg-white focus:ring-2 focus:ring-green/20 ${errors.name ? "border-red-500 focus:border-red-500" : "border-sage-light focus:border-green"}`}
-          />
-        </div>
-        {errors.name && (
-          <p className="mt-1 text-xs text-red-600">{errors.name}</p>
-        )}
       </div>
       {/* Email */}
       <div className="space-y-2">
