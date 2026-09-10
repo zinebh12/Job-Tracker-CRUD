@@ -4,7 +4,7 @@ import type {
   UpdateApplication,
 } from "./../types/applications";
 
-const API_BASE_URL = "http://localhost:5000/api/applications";
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/applications`;
 
 export const getApplications = async (
   page = 1,
